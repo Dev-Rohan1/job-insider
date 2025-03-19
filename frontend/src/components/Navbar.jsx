@@ -10,24 +10,33 @@ const Navbar = () => {
     <header>
       <nav className="flex items-center justify-between border-b border-gray-300 py-4">
         <Link to={"/"}>
-          <img className="max-w-30 md:w-full" src={assets.logo} alt="" />
+          <img
+            className="w-[130px] md:w-auto"
+            src={assets.logo}
+            alt="Logo"
+          />
         </Link>
         {user ? (
           <div className="flex items-center gap-2">
-            <Link to={"/applications"}>Job Applied</Link> |{" "}
+            <Link to={"/applications"} className="text-sm md:text-base">
+              Job Applied
+            </Link>
+            |{" "}
             <span className="hidden text-sm md:block md:text-base">
-              Hi, {user.fullName}
+              Hi, {user.fullName || "User"}
             </span>
             <UserButton />
           </div>
         ) : (
-          <div className="flex gap-2 md:gap-4">
-            <button className="text-sm md:text-base">RecruiterLogin</button>
+          <div className="flex items-center gap-2 md:gap-4">
+            <Link to="/recruiter-login" className="text-sm md:text-base">
+              RecruiterLogin
+            </Link>
             <button
               onClick={() => openSignIn()}
-              className="rounded bg-blue-500 px-3 py-1 text-sm text-white md:px-6 md:py-1.5 md:text-base"
+              className="cursor-pointer rounded bg-blue-500 px-3 py-1 text-sm text-white md:px-6 md:py-1.5 md:text-base"
             >
-              Login{" "}
+              Login
             </button>
           </div>
         )}
