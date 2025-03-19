@@ -7,14 +7,10 @@ const Navbar = () => {
   const { openSignIn, user } = useClerk();
 
   return (
-    <header>
+    <header className="mb-10">
       <nav className="flex items-center justify-between border-b border-gray-300 py-4">
         <Link to={"/"}>
-          <img
-            className="w-[130px] md:w-auto"
-            src={assets.logo}
-            alt="Logo"
-          />
+          <img className="w-[130px] md:w-auto" src={assets.logo} alt="Logo" />
         </Link>
         {user ? (
           <div className="flex items-center gap-2">
@@ -28,9 +24,9 @@ const Navbar = () => {
             <UserButton />
           </div>
         ) : (
-          <div className="flex items-center gap-2 md:gap-4">
+          <div className="flex items-center gap-2 md:gap-3">
             <Link to="/recruiter-login" className="text-sm md:text-base">
-              RecruiterLogin
+              Recruiter Login
             </Link>
             <button
               onClick={() => openSignIn()}
