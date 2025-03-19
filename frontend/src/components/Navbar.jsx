@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useClerk, UserButton } from "@clerk/clerk-react";
-
 import { assets } from "../assets/assets";
 
 const Navbar = () => {
@@ -11,7 +10,7 @@ const Navbar = () => {
     <header>
       <nav className="flex items-center justify-between border-b border-gray-300 py-4">
         <Link to={"/"}>
-          <img className="w-36 md:w-full" src={assets.logo} alt="" />
+          <img className="max-w-30 md:w-full" src={assets.logo} alt="" />
         </Link>
         {user ? (
           <div className="flex items-center gap-2">
@@ -26,9 +25,9 @@ const Navbar = () => {
             <button className="text-sm md:text-base">RecruiterLogin</button>
             <button
               onClick={() => openSignIn()}
-              className="rounded-md bg-blue-500 px-6 py-1.5 text-sm text-white md:text-base"
+              className="rounded bg-blue-500 px-3 py-1 text-sm text-white md:px-6 md:py-1.5 md:text-base"
             >
-              Login
+              Login{" "}
             </button>
           </div>
         )}
