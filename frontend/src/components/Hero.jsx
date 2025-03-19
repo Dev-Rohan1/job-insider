@@ -58,7 +58,7 @@ const Hero = () => {
               </div>
               <button
                 type="submit"
-                className="flex w-full cursor-pointer items-center justify-center rounded bg-blue-500 px-6 py-3 text-center text-white transition-colors hover:bg-blue-600 md:w-auto"
+                className="flex w-full cursor-pointer items-center justify-center rounded bg-blue-500 px-6 py-[8px] text-center text-white transition-colors hover:bg-blue-600 md:w-auto"
               >
                 Search
               </button>
