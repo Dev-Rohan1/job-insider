@@ -1,7 +1,7 @@
+import { MapPin, Search } from "lucide-react";
 import React, { useContext, useRef } from "react";
-import { Search, MapPin } from "lucide-react";
-import { AppContext } from "../contexts/AppContext";
 import { assets } from "../assets/assets";
+import { AppContext } from "../contexts/AppContext";
 
 const Hero = () => {
   const { setSearchFilter, setIsSearched } = useContext(AppContext);
