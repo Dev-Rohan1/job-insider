@@ -1,5 +1,5 @@
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { JobCategories, JobLocations } from "../assets/assets";
 import { AppContext } from "../contexts/AppContext";
@@ -11,17 +11,75 @@ const JobListing = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 6;
-  const totalPages = Math.ceil(jobs.length / jobsPerPage);
+
+  const [selectedCategory, setSelectedCategory] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState([]);
+  const [filterJobs, setFilterJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory((prev) =>
+      prev.includes(category)
+        ? prev.filter((item) => item !== category)
+        : [...prev, category],
+    );
+  };
+
+  const handleLocationChange = (location) => {
+    setSelectedLocation((prev) =>
+      prev.includes(location)
+        ? prev.filter((item) => item !== location)
+        : [...prev, location],
+    );
+  };
+
+  useEffect(() => {
+    if (!jobs || jobs.length === 0) return;
+
+    const categorySearch = (job) =>
+      selectedCategory.length === 0 || selectedCategory.includes(job.category);
+
+    const locationSearch = (job) =>
+      selectedLocation.length === 0 || selectedLocation.includes(job.location);
+
+    const titleSearch = (job) =>
+      !searchFilter.title ||
+      job.title.toLowerCase().includes(searchFilter.title.toLowerCase());
+
+    const searchLocation = (job) =>
+      !searchFilter.location ||
+      job.location.toLowerCase().includes(searchFilter.location.toLowerCase());
+
+    const newFilteredJobs = jobs.filter(
+      (job) =>
+        categorySearch(job) &&
+        locationSearch(job) &&
+        titleSearch(job) &&
+        searchLocation(job),
+    );
+
+    setFilterJobs(newFilteredJobs);
+    setCurrentPage(1);
+    setLoading(false);
+  }, [selectedCategory, selectedLocation, searchFilter, jobs]);
+
+  const totalPages = Math.ceil(filterJobs.length / jobsPerPage);
 
   const handleRemoveFilter = (key) => {
     setSearchFilter((prev) => {
       const updatedFilter = { ...prev, [key]: "" };
       if (!updatedFilter.title && !updatedFilter.location) {
         setIsSearched(false);
+      } else {
+        setIsSearched(true);
       }
       return updatedFilter;
     });
   };
+
+  if (loading) {
+    return <p className="mt-16 text-lg">Loading jobs... ⏳</p>;
+  }
 
   return (
     <section className="mt-16">
@@ -41,6 +99,7 @@ const JobListing = () => {
                       onClick={() => handleRemoveFilter("title")}
                       className="cursor-pointer"
                       size={18}
+                      aria-label="Remove title filter"
                     />
                   </span>
                 )}
@@ -51,6 +110,7 @@ const JobListing = () => {
                       onClick={() => handleRemoveFilter("location")}
                       className="cursor-pointer"
                       size={18}
+                      aria-label="Remove location filter"
                     />
                   </span>
                 )}
@@ -66,7 +126,12 @@ const JobListing = () => {
               {JobCategories.map((category, index) => (
                 <li key={index} className="mb-2">
                   <label className="flex items-center gap-1">
-                    <input type="checkbox" />
+                    <input
+                      type="checkbox"
+                      onChange={() => handleCategoryChange(category)}
+                      checked={selectedCategory.includes(category)}
+                      aria-label={`Filter by ${category}`}
+                    />
                     {category}
                   </label>
                 </li>
@@ -82,7 +147,12 @@ const JobListing = () => {
               {JobLocations.map((location, index) => (
                 <li key={index} className="mb-2">
                   <label className="flex items-center gap-1">
-                    <input type="checkbox" />
+                    <input
+                      type="checkbox"
+                      onChange={() => handleLocationChange(location)}
+                      checked={selectedLocation.includes(location)}
+                      aria-label={`Filter by ${location}`}
+                    />
                     {location}
                   </label>
                 </li>
@@ -97,44 +167,50 @@ const JobListing = () => {
             Latest jobs
           </h1>
           <p>Get your desired job from top companies</p>
-          <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {jobs
-              .slice((currentPage - 1) * jobsPerPage, currentPage * jobsPerPage)
-              .map((job, index) => (
-                <JobList key={index} job={job} />
-              ))}
-          </div>
+          {filterJobs.length === 0 ? (
+            <p className="mt-4">
+              🔍 No jobs match your filters. Try adjusting your search criteria!
+            </p>
+          ) : (
+            <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {filterJobs
+                .slice(
+                  (currentPage - 1) * jobsPerPage,
+                  currentPage * jobsPerPage,
+                )
+                .map((job) => (
+                  <JobList key={job.id} job={job} />
+                ))}
+            </div>
+          )}
 
           {/* Pagination */}
-          {jobs.length > 0 && (
+          {filterJobs.length > 0 && (
             <div className="mt-8 mb-10 flex items-center justify-center gap-2">
               <button
                 onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
-                className="cursor-pointer"
+                className={`cursor-pointer ${currentPage === 1 ? "cursor-not-allowed opacity-50" : ""}`}
+                disabled={currentPage === 1}
               >
                 <ChevronLeft />
               </button>
               {Array.from({ length: totalPages }, (_, index) => (
-                <div className="flex flex-wrap">
-                  {" "}
-                  <button
-                    key={index}
-                    onClick={() => setCurrentPage(index + 1)}
-                    className={`flex h-10 w-10 cursor-pointer items-center justify-center rounded border border-gray-300 text-lg outline-none ${
-                      index + 1 === currentPage
-                        ? "bg-blue-100 text-blue-500"
-                        : ""
-                    }`}
-                  >
-                    {index + 1}
-                  </button>
-                </div>
+                <button
+                  key={index}
+                  onClick={() => setCurrentPage(index + 1)}
+                  className={`flex h-10 w-10 cursor-pointer items-center justify-center rounded border border-gray-300 text-lg outline-none ${
+                    index + 1 === currentPage ? "bg-blue-100 text-blue-500" : ""
+                  }`}
+                >
+                  {index + 1}
+                </button>
               ))}
               <button
                 onClick={() =>
                   setCurrentPage(Math.min(currentPage + 1, totalPages))
                 }
-                className="cursor-pointer"
+                className={`cursor-pointer ${currentPage === totalPages ? "cursor-not-allowed opacity-50" : ""}`}
+                disabled={currentPage === totalPages}
               >
                 <ChevronRight />
               </button>
