@@ -50,13 +50,16 @@ const JobListing = () => {
       !searchFilter.location ||
       job.location.toLowerCase().includes(searchFilter.location.toLowerCase());
 
-    const newFilteredJobs = jobs.filter(
-      (job) =>
-        categorySearch(job) &&
-        locationSearch(job) &&
-        titleSearch(job) &&
-        searchLocation(job),
-    );
+    const newFilteredJobs = jobs
+      .slice()
+      .reverse()
+      .filter(
+        (job) =>
+          categorySearch(job) &&
+          locationSearch(job) &&
+          titleSearch(job) &&
+          searchLocation(job),
+      );
 
     setFilterJobs(newFilteredJobs);
     setCurrentPage(1);
@@ -88,9 +91,7 @@ const JobListing = () => {
         <div className="w-full md:w-[25%]">
           {isSearched && (
             <div className="mb-7">
-              <h2 className="mb-3 text-xl font-semibold lg:text-2xl">
-                Current Search
-              </h2>
+              <h2 className="mb-3 text-xl font-semibold">Current Search</h2>
               <div className="flex flex-wrap items-center gap-3">
                 {searchFilter.title && (
                   <span className="flex items-center gap-1 rounded border border-blue-300 bg-blue-50 px-3 py-1 text-gray-800">
@@ -119,9 +120,7 @@ const JobListing = () => {
           )}
 
           <div>
-            <h2 className="mb-3 text-xl font-semibold lg:text-2xl">
-              Search by Categories
-            </h2>
+            <h2 className="mb-3 text-xl font-semibold">Search by Categories</h2>
             <ul>
               {JobCategories.map((category, index) => (
                 <li key={index} className="mb-2">
@@ -140,9 +139,7 @@ const JobListing = () => {
           </div>
 
           <div className="mt-7">
-            <h2 className="mb-3 text-xl font-semibold lg:text-2xl">
-              Search by Location
-            </h2>
+            <h2 className="mb-3 text-xl font-semibold">Search by Location</h2>
             <ul>
               {JobLocations.map((location, index) => (
                 <li key={index} className="mb-2">
@@ -168,8 +165,9 @@ const JobListing = () => {
           </h1>
           <p>Get your desired job from top companies</p>
           {filterJobs.length === 0 ? (
-            <p className="mt-4">
+            <p className="mt-4 text-lg text-red-600">
               🔍 No jobs match your filters. Try adjusting your search criteria!
+              🥲
             </p>
           ) : (
             <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -178,8 +176,8 @@ const JobListing = () => {
                   (currentPage - 1) * jobsPerPage,
                   currentPage * jobsPerPage,
                 )
-                .map((job) => (
-                  <JobList key={job.id} job={job} />
+                .map((job, index) => (
+                  <JobList key={index} job={job} />
                 ))}
             </div>
           )}

@@ -1,7 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 
 const JobList = ({ job }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="rounded border border-gray-300 p-4">
       <img className="mb-4" src={assets.company_icon} alt="" />
@@ -19,10 +22,16 @@ const JobList = ({ job }) => {
         dangerouslySetInnerHTML={{ __html: job.description.slice(0, 156) }}
       ></div>
       <div className="flex items-center gap-2">
-        <button className="cursor-pointer rounded bg-blue-500 px-3 py-1.5 text-[15px] text-white">
+        <button
+          onClick={() => navigate(`/apply-jobs/${job._id}`)}
+          className="cursor-pointer rounded bg-blue-500 px-3 py-1.5 text-[15px] text-white"
+        >
           Apply now
         </button>
-        <button className="cursor-pointer rounded border border-gray-300 px-3 py-1.5 text-[15px] text-gray-800">
+        <button
+          onClick={() => navigate(`/apply-jobs/${job._id}`)}
+          className="cursor-pointer rounded border border-gray-300 px-3 py-1.5 text-[15px] text-gray-800"
+        >
           Learn more
         </button>
       </div>
