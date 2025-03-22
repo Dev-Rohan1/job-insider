@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { SpinnerCircularFixed } from "spinners-react";
 import Navbar from "../components/Navbar";
 import { AppContext } from "../contexts/AppContext";
 import { assets } from "../assets/assets";
@@ -8,6 +7,7 @@ import { MapPin, User } from "lucide-react";
 import moment from "moment";
 import kConverter from "k-convert";
 import JobList from "../components/JobList";
+import Loader from "../components/Loader";
 
 const ApplyJobs = () => {
   const [jobData, setJobData] = useState(null);
@@ -31,12 +31,8 @@ const ApplyJobs = () => {
     return (
       <>
         <Navbar />
-        <div className="flex min-h-screen items-center justify-center">
-          <SpinnerCircularFixed
-            secondaryColor="#3AC8B4"
-            size={100}
-            color="blue"
-          />
+        <div className="flex h-[70vh] items-center justify-center">
+          <Loader />
         </div>
       </>
     );
