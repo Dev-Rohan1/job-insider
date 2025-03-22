@@ -121,10 +121,10 @@ const JobListing = () => {
 
           <div>
             <h2 className="mb-3 text-xl font-semibold">Search by Categories</h2>
-            <ul>
+            <div>
               {JobCategories.map((category, index) => (
-                <li key={index} className="mb-2">
-                  <label className="flex items-center gap-1">
+                <span key={index}>
+                  <label className="mb-2 flex items-center gap-2">
                     <input
                       type="checkbox"
                       onChange={() => handleCategoryChange(category)}
@@ -133,17 +133,17 @@ const JobListing = () => {
                     />
                     {category}
                   </label>
-                </li>
+                </span>
               ))}
-            </ul>
+            </div>
           </div>
 
           <div className="mt-7">
             <h2 className="mb-3 text-xl font-semibold">Search by Location</h2>
-            <ul>
+            <div>
               {JobLocations.map((location, index) => (
-                <li key={index} className="mb-2">
-                  <label className="flex items-center gap-1">
+                <span key={index} className="mb-2">
+                  <label className="mb-2 flex items-center gap-2">
                     <input
                       type="checkbox"
                       onChange={() => handleLocationChange(location)}
@@ -152,9 +152,9 @@ const JobListing = () => {
                     />
                     {location}
                   </label>
-                </li>
+                </span>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
 
@@ -184,11 +184,14 @@ const JobListing = () => {
 
           {/* Pagination */}
           {filterJobs.length > 0 && (
-            <div className="mt-8 mb-10 flex items-center justify-center gap-2">
+            <div className="mt-8 mb-10 flex flex-wrap items-center justify-center gap-2">
               <button
                 onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
-                className={`cursor-pointer ${currentPage === 1 ? "cursor-not-allowed opacity-50" : ""}`}
+                className={`cursor-pointer ${
+                  currentPage === 1 ? "cursor-not-allowed opacity-50" : ""
+                }`}
                 disabled={currentPage === 1}
+                aria-label="Previous page"
               >
                 <ChevronLeft />
               </button>
@@ -199,6 +202,7 @@ const JobListing = () => {
                   className={`flex h-10 w-10 cursor-pointer items-center justify-center rounded border border-gray-300 text-lg outline-none ${
                     index + 1 === currentPage ? "bg-blue-100 text-blue-500" : ""
                   }`}
+                  aria-label={`Page ${index + 1}`}
                 >
                   {index + 1}
                 </button>
@@ -207,8 +211,13 @@ const JobListing = () => {
                 onClick={() =>
                   setCurrentPage(Math.min(currentPage + 1, totalPages))
                 }
-                className={`cursor-pointer ${currentPage === totalPages ? "cursor-not-allowed opacity-50" : ""}`}
+                className={`cursor-pointer ${
+                  currentPage === totalPages
+                    ? "cursor-not-allowed opacity-50"
+                    : ""
+                }`}
                 disabled={currentPage === totalPages}
+                aria-label="Next page"
               >
                 <ChevronRight />
               </button>

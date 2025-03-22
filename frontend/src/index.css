@@ -5,3 +5,34 @@
 * {
   font-family: "Outfit", sans-serif;
 }
+
+@layer components {
+  .job-description p {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #000000a6;
+    margin-bottom: 25px;
+  }
+
+  .job-description h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-bottom: 15px;
+    font-size: 23px;
+  }
+
+  .job-description ol,
+  ul {
+    list-style: decimal;
+    color: #000000a6;
+    margin-bottom: 25px;
+    padding-left: 34px;
+  }
+  .job-description ol li,
+  ul li {
+    margin-bottom: 5px;
+  }
+}

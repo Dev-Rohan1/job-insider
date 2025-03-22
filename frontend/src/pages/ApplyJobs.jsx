@@ -7,6 +7,7 @@ import { assets } from "../assets/assets";
 import { MapPin, User } from "lucide-react";
 import moment from "moment";
 import kConverter from "k-convert";
+import JobList from "../components/JobList";
 
 const ApplyJobs = () => {
   const [jobData, setJobData] = useState(null);
@@ -30,7 +31,7 @@ const ApplyJobs = () => {
     return (
       <>
         <Navbar />
-        <div className="flex h-[80vh] items-center justify-center">
+        <div className="flex min-h-screen items-center justify-center">
           <SpinnerCircularFixed
             secondaryColor="#3AC8B4"
             size={100}
@@ -50,13 +51,19 @@ const ApplyJobs = () => {
     );
   }
 
+  // Filter jobs from the same company and exclude the current job
+  const similarJobs = jobs.filter(
+    (job) =>
+      job.companyId.name === jobData.companyId.name && job._id !== jobData._id,
+  );
+
   return (
     <>
       <Navbar />
       <section>
         <div className="flex flex-col rounded-xl border border-blue-300 bg-blue-50 p-16 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-col items-center gap-5 md:flex-row">
-            <div className="flex h-26 w-26 items-center justify-center rounded-lg border border-gray-200 bg-white">
+            <div className="flex h-[6.5rem] w-[6.5rem] items-center justify-center rounded-lg border border-gray-200 bg-white">
               <img
                 className="w-14"
                 src={assets.company_icon}
@@ -68,28 +75,43 @@ const ApplyJobs = () => {
                 {jobData.title || "Job Title Not Available"}
               </h2>
               <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4">
-                <div className="flex items-center gap-1">
-                  <img src={assets.suitcase_icon} alt="Suitcase Icon" />
+                <div
+                  className="flex items-center gap-1"
+                  role="img"
+                  aria-label="Company"
+                >
+                  <img
+                    src={assets.suitcase_icon}
+                    alt="Suitcase Icon"
+                    className="h-5 w-5"
+                  />
                   <span className="text-gray-700">
                     {jobData.companyId?.name || "Company Not Specified"}
                   </span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <MapPin size={19} className="text-gray-600" />
-                  <span className="text-gray-700">
+                  <MapPin size={20} className="text-gray-600" />
+                  <span className="flex items-center text-gray-700">
                     {jobData.location || "Location Not Specified"}
                   </span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <User size={19} className="text-gray-600" />
+                  <User size={20} className="text-gray-600" />
                   <span className="text-gray-700">
                     {jobData.level || "Level Not Specified"}
                   </span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <img src={assets.money_icon} alt="Money Icon" />
+                  <img
+                    src={assets.money_icon}
+                    alt="Money Icon"
+                    className="h-5 w-5"
+                  />
                   <span className="text-gray-700">
-                    CTC: {kConverter.convertTo(jobData.salary)}
+                    CTC:{" "}
+                    {jobData.salary
+                      ? kConverter.convertTo(jobData.salary)
+                      : "Not Specified"}
                   </span>
                 </div>
               </div>
@@ -105,6 +127,37 @@ const ApplyJobs = () => {
             <span className="mt-2 block text-sm text-gray-600">
               Posted {moment(jobData.date).fromNow()}
             </span>
+          </div>
+        </div>
+
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:gap-5">
+          <div className="w-full md:w-[70%]">
+            <h2 className="mt-10 mb-4 font-bold">Job description</h2>
+            <div
+              className="job-description"
+              dangerouslySetInnerHTML={{
+                __html: jobData.description,
+              }}
+            ></div>
+          </div>
+          <div className="mt-10 w-full lg:w-[28%]">
+            <p className="mb-7 text-xl font-semibold">
+              More jobs from{" "}
+              <strong className="text-blue-500">
+                {jobData.companyId.name}
+              </strong>
+            </p>
+            <div className="flex flex-col gap-5">
+              {similarJobs.length > 0 ? (
+                similarJobs
+                  .slice(0, 2)
+                  .map((job, index) => <JobList key={index} job={job} />)
+              ) : (
+                <div className="text-red-500">
+                  No more jobs available from this company 😔
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>
