@@ -150,7 +150,7 @@ const ApplyJobs = () => {
                 {jobData.companyId.name}
               </strong>
             </p>
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-5 mb-10">
               {similarJobs.length > 0 ? (
                 similarJobs
                   .slice(0, 2)

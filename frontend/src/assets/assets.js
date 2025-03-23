@@ -82,14 +82,32 @@ export const JobCategories = [
   "Cybersecurity",
 ];
 
+export const JobCategoriesEmojis = ["👨‍💻", "📊", "🎨", "🌐", "📋", "📈", "🔒"];
+
 export const JobLocations = [
-  "Bangalore",
-  "Washington",
-  "Hyderabad",
-  "Mumbai",
-  "California",
-  "Chennai",
+  "Bangladesh",
+  "India",
   "New York",
+  "London",
+  "California",
+  "Dubai",
+  "Germany",
+  "Japan",
+  "Australia",
+  "Canada",
+];
+
+export const JobLocationsEmojis = [
+  "🇧🇩",
+  "🇮🇳",
+  "🇺🇸",
+  "🇬🇧",
+  "🇺🇸",
+  "🇦🇪",
+  "🇩🇪",
+  "🇯🇵",
+  "🇦🇺",
+  "🇨🇦",
 ];
 
 // Sample data for Manage Jobs Page
@@ -752,7 +770,7 @@ export const jobsData = [
   {
     _id: "17",
     title: "Sales Manager",
-    location: "New York",
+    location: "Canada",
     level: "Senior Level",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
@@ -851,7 +869,7 @@ export const jobsData = [
   {
     _id: "20",
     title: "Graphic Designer",
-    location: "Chennai",
+    location: "Australia",
     level: "Intermediate Level",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
@@ -884,7 +902,7 @@ export const jobsData = [
   {
     _id: "21",
     title: "Software Tester",
-    location: "Chennai",
+    location: "Japan",
     level: "Intermediate Level",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
@@ -917,7 +935,7 @@ export const jobsData = [
   {
     _id: "22",
     title: "Network Security Engineer",
-    location: "Bangalore",
+    location: "Germany",
     level: "Senior Level",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
@@ -950,7 +968,7 @@ export const jobsData = [
   {
     _id: "23",
     title: "Cloud Engineer",
-    location: "Hyderabad",
+    location: "Dubai",
     level: "Intermediate Level",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
@@ -983,7 +1001,7 @@ export const jobsData = [
   {
     _id: "24",
     title: "MERN Stack Developer 🚀",
-    location: "San Francisco 🌉",
+    location: "Dubai",
     level: "Mid-Level 🏅",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
@@ -1022,12 +1040,12 @@ export const jobsData = [
     `,
     salary: 70000, // Annual salary in USD
     date: 1729681667114, // Timestamp for job posting date
-    category: "Programming 💻",
+    category: "Programming",
   },
   {
     _id: "25",
     title: "React Developer ⚛️",
-    location: "New York City 🗽",
+    location: "California",
     level: "Mid-Level 🏅",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
@@ -1067,12 +1085,12 @@ export const jobsData = [
     `,
     salary: 75000, // Annual salary in USD
     date: 1729681667114, // Timestamp for job posting date
-    category: "Frontend Development 🖥️",
+    category: "Programming",
   },
   {
     _id: "26",
     title: "Frontend Developer 🎨",
-    location: "Berlin 🇩🇪",
+    location: "California",
     level: "Mid-Level 🏅",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
@@ -1111,12 +1129,12 @@ export const jobsData = [
     `,
     salary: 80000,
     date: 1729681667114,
-    category: "Frontend Development 🖥️",
+    category: "Programming",
   },
   {
     _id: "27",
     title: "Backend Developer ⚙️",
-    location: "London 🇬🇧",
+    location: "London",
     level: "Senior Level 🏆",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
@@ -1155,12 +1173,12 @@ export const jobsData = [
     `,
     salary: 95000,
     date: 1729681667114,
-    category: "Backend Development ⚙️",
+    category: "Programming",
   },
   {
     _id: "28",
     title: "AI Engineer 🤖",
-    location: "Tokyo 🇯🇵",
+    location: "London",
     level: "Senior Level 🏆",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
@@ -1199,12 +1217,12 @@ export const jobsData = [
     `,
     salary: 110000,
     date: 1729681667114,
-    category: "Artificial Intelligence 🤖",
+    category: "Data Science",
   },
   {
     _id: "29",
     title: "Product Manager 📊",
-    location: "Paris 🇫🇷",
+    location: "New York",
     level: "Senior Level 🏆",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
@@ -1248,7 +1266,7 @@ export const jobsData = [
   {
     _id: "30",
     title: "Data Analyst 📈",
-    location: "Sydney 🇦🇺",
+    location: "India",
     level: "Mid-Level 🏅",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
@@ -1287,12 +1305,12 @@ export const jobsData = [
     `,
     salary: 85000,
     date: 1729681667114,
-    category: "Data Analysis 📊",
+    category: "Data Analysis",
   },
   {
     _id: "31",
     title: "DevOps Engineer 🛠️",
-    location: "Toronto 🇨🇦",
+    location: "India",
     level: "Senior Level 🏆",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
@@ -1331,12 +1349,12 @@ export const jobsData = [
     `,
     salary: 105000,
     date: 1729681667114,
-    category: "DevOps 🛠️",
+    category: "Programming",
   },
   {
     _id: "32",
     title: "UI/UX Designer 🎨",
-    location: "Berlin 🇩🇪",
+    location: "Bangladesh",
     level: "Mid-Level 🏅",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
@@ -1375,12 +1393,12 @@ export const jobsData = [
     `,
     salary: 90000,
     date: 1729681667114,
-    category: "UI/UX Design 🎨",
+    category: "Designing",
   },
   {
     _id: "33",
     title: "Cybersecurity Analyst 🔒",
-    location: "Singapore 🇸🇬",
+    location: "Bangladesh",
     level: "Senior Level 🏆",
     companyId: {
       _id: "670e4d25ca9fda8f1bf359b9",
@@ -1419,6 +1437,6 @@ export const jobsData = [
     `,
     salary: 110000,
     date: 1729681667114,
-    category: "cybersecurity 🔒",
+    category: "Cybersecurity",
   },
 ];

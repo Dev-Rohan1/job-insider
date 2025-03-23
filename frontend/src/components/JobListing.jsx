@@ -1,7 +1,12 @@
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import React, { useContext, useEffect, useState } from "react";
 
-import { JobCategories, JobLocations } from "../assets/assets";
+import {
+  JobCategories,
+  JobCategoriesEmojis,
+  JobLocations,
+  JobLocationsEmojis,
+} from "../assets/assets";
 import { AppContext } from "../contexts/AppContext";
 import JobList from "./JobList";
 
@@ -87,7 +92,6 @@ const JobListing = () => {
   return (
     <section className="mt-16">
       <div className="flex w-full flex-col justify-between gap-10 lg:flex-row">
-        {/* Sidebar */}
         <div className="w-full md:w-[25%]">
           {isSearched && (
             <div className="mb-7">
@@ -131,7 +135,10 @@ const JobListing = () => {
                       checked={selectedCategory.includes(category)}
                       aria-label={`Filter by ${category}`}
                     />
-                    {category}
+                    <span>{category}</span>
+                    {JobCategoriesEmojis[index] && (
+                      <span>{JobCategoriesEmojis[index]}</span>
+                    )}
                   </label>
                 </span>
               ))}
@@ -150,7 +157,7 @@ const JobListing = () => {
                       checked={selectedLocation.includes(location)}
                       aria-label={`Filter by ${location}`}
                     />
-                    {location}
+                    {location} {JobLocationsEmojis[index]}
                   </label>
                 </span>
               ))}
@@ -158,7 +165,6 @@ const JobListing = () => {
           </div>
         </div>
 
-        {/* Job List */}
         <div className="w-full">
           <h1 className="mb-2 text-2xl font-semibold text-gray-800 md:text-3xl">
             Latest jobs
@@ -182,7 +188,6 @@ const JobListing = () => {
             </div>
           )}
 
-          {/* Pagination */}
           {filterJobs.length > 0 && (
             <div className="mt-8 mb-10 flex flex-wrap items-center justify-center gap-2">
               <button
