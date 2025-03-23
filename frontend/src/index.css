@@ -6,6 +6,10 @@
   font-family: "Outfit", sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 @layer components {
   .job-description p {
     font-size: 16px;

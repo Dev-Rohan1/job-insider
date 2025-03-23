@@ -8,6 +8,7 @@ import moment from "moment";
 import kConverter from "k-convert";
 import JobList from "../components/JobList";
 import Loader from "../components/Loader";
+import Footer from "../components/Footer";
 
 const ApplyJobs = () => {
   const [jobData, setJobData] = useState(null);
@@ -135,6 +136,12 @@ const ApplyJobs = () => {
                 __html: jobData.description,
               }}
             ></div>
+            <button
+              className="mb-10 cursor-pointer rounded bg-blue-600 px-8 py-2 text-white"
+              aria-label="Apply for this job"
+            >
+              Apply now
+            </button>
           </div>
           <div className="mt-10 w-full lg:w-[28%]">
             <p className="mb-7 text-xl font-semibold">
@@ -147,6 +154,7 @@ const ApplyJobs = () => {
               {similarJobs.length > 0 ? (
                 similarJobs
                   .slice(0, 2)
+                  .reverse()
                   .map((job, index) => <JobList key={index} job={job} />)
               ) : (
                 <div className="text-red-500">
@@ -157,6 +165,7 @@ const ApplyJobs = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   );
 };

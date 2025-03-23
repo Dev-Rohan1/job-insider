@@ -23,13 +23,19 @@ const JobList = ({ job }) => {
       ></div>
       <div className="flex items-center gap-2">
         <button
-          onClick={() => navigate(`/apply-jobs/${job._id}`)}
+          onClick={() => {
+            navigate(`/apply-jobs/${job._id}`);
+            scrollTo(0, 0);
+          }}
           className="cursor-pointer rounded bg-blue-500 px-3 py-1.5 text-[15px] text-white"
         >
           Apply now
         </button>
         <button
-          onClick={() => navigate(`/apply-jobs/${job._id}`)}
+          onClick={() => {
+            navigate(`/apply-jobs/${job._id}`);
+            scrollTo(0, 0);
+          }}
           className="cursor-pointer rounded border border-gray-300 px-3 py-1.5 text-[15px] text-gray-800"
         >
           Learn more
