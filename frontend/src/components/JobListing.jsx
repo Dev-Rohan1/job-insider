@@ -157,7 +157,12 @@ const JobListing = () => {
                       checked={selectedLocation.includes(location)}
                       aria-label={`Filter by ${location}`}
                     />
-                    {location} {JobLocationsEmojis[index]}
+                    <span className="flex items-center gap-2">
+                      {location}
+                      {JobLocationsEmojis[index] && (
+                        <span>{JobLocationsEmojis[index]}</span>
+                      )}
+                    </span>
                   </label>
                 </span>
               ))}
