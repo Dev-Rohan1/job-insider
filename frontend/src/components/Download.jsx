@@ -10,7 +10,7 @@ const Download = () => {
             Download Mobile App
             <br className="hidden lg:block" /> For Better Experience
           </h1>
-          <div className="flex justify-center space-x-4 lg:justify-start">
+          <div className="flex flex-wrap justify-center gap-4 lg:justify-start">
             <img
               src={assets.play_store}
               alt="Play Store"
