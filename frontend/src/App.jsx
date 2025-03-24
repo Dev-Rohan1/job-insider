@@ -10,6 +10,7 @@ import AddJobs from "./pages/AddJobs";
 import ManageJobs from "./pages/ManageJobs";
 import ViewApplications from "./pages/ViewApplications";
 import Dashboard from "./pages/Dashboard";
+import "quill/dist/quill.snow.css";
 const App = () => {
   return (
     <AppLayout>

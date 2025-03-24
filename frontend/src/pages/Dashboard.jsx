@@ -37,10 +37,9 @@ const Dashboard = () => {
   return (
     <div className="flex min-h-screen flex-col">
       <DashboardNavbar />
-      <section className="flex flex-1">
-        {/* Sidebar */}
-        <div className="sticky top-16 h-[calc(100vh-4rem)] w-16 border-r border-gray-300 bg-white md:w-64">
-          <ul className="space-y-3 pr-4">
+      <section className="flex flex-1 overflow-hidden">
+        <div className="sticky top-16 h-[calc(100vh-var(--header-height)] w-16 border-r border-gray-300 bg-white md:w-64">
+          <ul className="h-full space-y-3 overflow-y-auto pr-4 pb-4">
             {navLinks.map(({ to, icon, alt, label }) => (
               <li key={to}>
                 <NavLink
@@ -70,9 +69,8 @@ const Dashboard = () => {
           </ul>
         </div>
 
-        {/* Main Content */}
-        <div className="min-h-[calc(100vh-4rem)] flex-1 overflow-auto px-4 md:px-6">
-          <div className="mx-auto max-w-7xl">
+        <div className="flex-1 overflow-auto">
+          <div className="mx-auto mb-10 h-[calc(100vh-var(--header-height)] max-w-7xl px-4 md:px-6">
             <Outlet />
           </div>
         </div>
