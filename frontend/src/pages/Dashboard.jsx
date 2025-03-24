@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import DashboardNavbar from "../components/DashboardNavbar";
 import { assets } from "../assets/assets";
+import DashboardNavbar from "../components/DashboardNavbar";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -28,21 +28,22 @@ const Dashboard = () => {
   ];
 
   useEffect(() => {
-    if (window.location.pathname !== "/dashboard/manage-jobs") {
+    if (window.location.pathname === "/dashboard") {
       navigate("/dashboard/manage-jobs");
     }
   }, [navigate]);
 
   return (
-    <>
+    <div className="min-h-screen">
       <DashboardNavbar />
       <section className="flex">
         <div className="h-screen w-[75px] border-r border-gray-300 md:w-64">
-          <ul className="px-4">
-            {navLinks.map(({ to, icon, alt, label }) => (
-              <li key={to}>
+          <ul className="space-y-2 px-4">
+            {navLinks.map(({ to, icon, alt, label }, index) => (
+              <li key={`nav-${index}`}>
                 <NavLink
                   to={to}
+                  end
                   className={({ isActive }) =>
                     `flex items-center gap-3 rounded-lg p-3 transition-colors ${
                       isActive
@@ -50,8 +51,16 @@ const Dashboard = () => {
                         : "text-gray-700 hover:bg-gray-100"
                     }`
                   }
+                  aria-current={({ isActive }) =>
+                    isActive ? "page" : undefined
+                  }
                 >
-                  <img src={icon} alt={alt} className="h-5 w-5" />
+                  <img
+                    src={icon}
+                    alt={alt}
+                    className="h-5 w-5"
+                    loading="lazy"
+                  />
                   <span className="hidden md:block">{label}</span>
                 </NavLink>
               </li>
@@ -59,11 +68,11 @@ const Dashboard = () => {
           </ul>
         </div>
 
-        <div className="min-h-screen px-6">
+        <div className="min-h-screen flex-1 px-4 md:px-6">
           <Outlet />
         </div>
       </section>
-    </>
+    </div>
   );
 };
 
