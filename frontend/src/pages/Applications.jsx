@@ -1,7 +1,16 @@
 import React from "react";
 
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+
 const Applications = () => {
-  return <div>Applications</div>;
+  return (
+    <>
+      <Navbar />
+      <div>Applications</div>
+      <Footer />
+    </>
+  );
 };
 
 export default Applications;

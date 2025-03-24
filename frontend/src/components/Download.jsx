@@ -7,8 +7,8 @@ const Download = () => {
       <div className="flex flex-col items-center lg:flex-row lg:items-center lg:justify-between">
         <div className="mb-8 text-center lg:mb-0 lg:text-left">
           <h1 className="mb-6 text-3xl leading-tight font-semibold lg:text-4xl lg:leading-snug lg:font-bold">
-            Download Mobile App
-            <br className="hidden lg:block" /> For Better Experience
+            Download Mobile App For <br className="hidden lg:block" /> Better
+            Experience
           </h1>
           <div className="flex flex-wrap justify-center gap-4 lg:justify-start">
             <img
