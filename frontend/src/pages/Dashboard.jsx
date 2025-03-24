@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { assets } from "../assets/assets";
 import DashboardNavbar from "../components/DashboardNavbar";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const navLinks = [
     {
@@ -28,24 +29,25 @@ const Dashboard = () => {
   ];
 
   useEffect(() => {
-    if (window.location.pathname === "/dashboard") {
-      navigate("/dashboard/manage-jobs");
+    if (location.pathname === "/dashboard") {
+      navigate("/dashboard/manage-jobs", { replace: true });
     }
-  }, [navigate]);
+  }, [navigate, location]);
 
   return (
-    <div className="min-h-screen">
+    <div className="flex min-h-screen flex-col">
       <DashboardNavbar />
-      <section className="flex">
-        <div className="h-screen w-[75px] border-r border-gray-300 md:w-64">
-          <ul className="space-y-2 pr-7 md:pr-4">
-            {navLinks.map(({ to, icon, alt, label }, index) => (
-              <li key={`nav-${index}`}>
+      <section className="flex flex-1">
+        {/* Sidebar */}
+        <div className="sticky top-16 h-[calc(100vh-4rem)] w-16 border-r border-gray-300 bg-white md:w-64">
+          <ul className="space-y-3 pr-4">
+            {navLinks.map(({ to, icon, alt, label }) => (
+              <li key={to}>
                 <NavLink
                   to={to}
                   end
                   className={({ isActive }) =>
-                    `flex items-center gap-3 rounded-lg p-3 transition-colors ${
+                    `flex items-center justify-center gap-2 rounded-lg p-3 transition-colors md:justify-start md:gap-3 ${
                       isActive
                         ? "bg-blue-50 font-medium text-blue-600"
                         : "text-gray-700 hover:bg-gray-100"
@@ -58,18 +60,21 @@ const Dashboard = () => {
                   <img
                     src={icon}
                     alt={alt}
-                    className="h-5 w-5"
+                    className="h-5 w-5 shrink-0"
                     loading="lazy"
                   />
-                  <span className="hidden md:block">{label}</span>
+                  <span className="hidden truncate md:block">{label}</span>
                 </NavLink>
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="min-h-screen flex-1 px-4 md:px-6">
-          <Outlet />
+        {/* Main Content */}
+        <div className="min-h-[calc(100vh-4rem)] flex-1 overflow-auto px-4 md:px-6">
+          <div className="mx-auto max-w-7xl">
+            <Outlet />
+          </div>
         </div>
       </section>
     </div>
