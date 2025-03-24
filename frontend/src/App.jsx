@@ -6,6 +6,10 @@ import Applications from "./pages/Applications";
 import AppLayout from "./layout/AppLayout";
 import RecruiterLogin from "./pages/RecruiterLogin";
 import RecruiterSignup from "./pages/RecruiterSignup";
+import AddJobs from "./pages/AddJobs";
+import ManageJobs from "./pages/ManageJobs";
+import ViewApplications from "./pages/ViewApplications";
+import Dashboard from "./pages/Dashboard";
 const App = () => {
   return (
     <AppLayout>
@@ -15,6 +19,11 @@ const App = () => {
         <Route path="/applications" element={<Applications />} />
         <Route path="/recruiter-login" element={<RecruiterLogin />} />
         <Route path="/recruiter-signup" element={<RecruiterSignup />} />
+        <Route path="/dashboard" element={<Dashboard />}>
+          <Route path="add-jobs" element={<AddJobs />} />
+          <Route path="manage-jobs" element={<ManageJobs />} />
+          <Route path="view-applications" element={<ViewApplications />} />
+        </Route>
       </Routes>
     </AppLayout>
   );

@@ -29,7 +29,7 @@ html {
   }
 
   .job-description ol,
-  ul {
+  .job-description ul {
     list-style: decimal;
     color: #000000a6;
     margin-bottom: 25px;
