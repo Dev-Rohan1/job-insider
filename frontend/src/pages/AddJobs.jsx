@@ -10,7 +10,7 @@ const AddJobs = () => {
   const [jobTitle, setJobTitle] = useState("");
   const [JobCategory, setJobCategory] = useState("Programming");
   const [JobLocation, setJobLocation] = useState("Bangladesh");
-  const [JobLevel, setJobLevel] = useState("Senior Level");
+  const [JobLevel, setJobLevel] = useState("Junior Level");
   const [salary, setSalary] = useState("");
 
   const handler = (e) => {
