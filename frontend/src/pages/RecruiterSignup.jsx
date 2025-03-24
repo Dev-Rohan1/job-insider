@@ -30,7 +30,6 @@ const RecruiterSignup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
   };
 
   return (
@@ -60,7 +59,7 @@ const RecruiterSignup = () => {
                     src={logo || assets.upload_area}
                     alt="Upload company logo"
                   />
-                  <span className="text-gray-700">Upload company logo</span>
+                  <span className="text-gray-600">Upload company logo</span>
                 </label>
               </div>
 

@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import { AppContext } from "../contexts/AppContext";
-import { assets } from "../assets/assets";
+import kConverter from "k-convert";
 import { MapPin, User } from "lucide-react";
 import moment from "moment";
-import kConverter from "k-convert";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { assets } from "../assets/assets";
+import Footer from "../components/Footer";
 import JobList from "../components/JobList";
 import Loader from "../components/Loader";
-import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
+import { AppContext } from "../contexts/AppContext";
 
 const ApplyJobs = () => {
   const [jobData, setJobData] = useState(null);
@@ -45,7 +45,7 @@ const ApplyJobs = () => {
         <Navbar />
         <div>Job not found.</div>
       </>
-    );
+    );k
   }
 
   // Filter jobs from the same company and exclude the current job
@@ -129,7 +129,9 @@ const ApplyJobs = () => {
 
         <div className="flex flex-col lg:flex-row lg:justify-between lg:gap-5">
           <div className="w-full md:w-[70%]">
-            <h2 className="mt-10 mb-4 font-bold">Job description</h2>
+            <h2 className="mt-10 mb-4 text-2xl font-bold text-gray-800">
+              Job description
+            </h2>
             <div
               className="job-description"
               dangerouslySetInnerHTML={{
@@ -150,7 +152,7 @@ const ApplyJobs = () => {
                 {jobData.companyId.name}
               </strong>
             </p>
-            <div className="flex flex-col gap-5 mb-10">
+            <div className="mb-10 flex flex-col gap-5">
               {similarJobs.length > 0 ? (
                 similarJobs
                   .slice(0, 2)

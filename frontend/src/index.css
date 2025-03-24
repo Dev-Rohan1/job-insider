@@ -19,11 +19,11 @@ html {
   }
 
   .job-description h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  .job-description h2,
+  .job-description h3,
+  .job-description h4,
+  .job-description h5,
+  .job-description h6 {
     margin-bottom: 15px;
     font-size: 23px;
   }
