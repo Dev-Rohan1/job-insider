@@ -27,6 +27,7 @@ const RecruiterLogin = () => {
             <p className="mb-6 text-gray-700">
               Welcome back! Please log in to continue.
             </p>
+            <Link to={"/dashboard"}>dashboard</Link>
             <div className="space-y-4">
               <div className="flex w-full items-center gap-2 rounded border border-gray-300 bg-gray-50 p-2 transition-all focus-within:border-blue-500 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-200">
                 <Mail size={18} className="text-gray-400" />

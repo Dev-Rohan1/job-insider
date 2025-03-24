@@ -38,7 +38,7 @@ const Dashboard = () => {
       <DashboardNavbar />
       <section className="flex">
         <div className="h-screen w-[75px] border-r border-gray-300 md:w-64">
-          <ul className="space-y-2 px-4">
+          <ul className="space-y-2 pr-7 md:pr-4">
             {navLinks.map(({ to, icon, alt, label }, index) => (
               <li key={`nav-${index}`}>
                 <NavLink
