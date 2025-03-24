@@ -38,7 +38,7 @@ const Dashboard = () => {
     <div className="flex min-h-screen flex-col">
       <DashboardNavbar />
       <section className="flex flex-1 overflow-hidden">
-        <div className="sticky top-16 h-[calc(100vh-var(--header-height)] w-16 border-r border-gray-300 bg-white md:w-64">
+        <div className="sticky top-16 h-[calc(100vh-var(--header-height)] w-16 border-r border-gray-300 bg-white md:w-55">
           <ul className="h-full space-y-3 overflow-y-auto pr-4 pb-4">
             {navLinks.map(({ to, icon, alt, label }) => (
               <li key={to}>
