@@ -2,13 +2,9 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
-    const connectionString = process.env.DATABASE_CONNECTION_STRING;
-
-    if (!connectionString) {
-      throw new Error("Database connection string is not provided");
-    }
-
-    await mongoose.connect(`${connectionString}`);
+    await mongoose.connect(
+      `${process.env.DATABASE_CONNECTION_STRING}insider-job`
+    );
 
     console.log("✅ Database connection successful");
   } catch (error) {
