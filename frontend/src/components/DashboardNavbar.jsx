@@ -18,7 +18,7 @@ const DashboardNavbar = () => {
         <div className="flex items-center gap-3">
           <span className="text-sm font-medium md:text-base">Hi, Rohan</span>
           <img
-            src={assets.company_icon || "/path/to/default/company-icon.png"}
+            src={assets.profile_pic}
             alt="Company Icon"
             className="h-7 w-7"
           />

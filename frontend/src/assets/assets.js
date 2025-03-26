@@ -33,6 +33,7 @@ import suitcase_icon from "./suitcase_icon.svg";
 import twitter_icon from "./twitter_icon.svg";
 import upload_area from "./upload_area.svg";
 import walmart_logo from "./walmart_logo.svg";
+import profile_pic from "./boy.png";
 
 export const assets = {
   logo,
@@ -70,6 +71,7 @@ export const assets = {
   samsung_logo,
   adobe_logo,
   amazon_logo,
+  profile_pic,
 };
 
 export const JobCategories = [

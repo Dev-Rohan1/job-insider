@@ -37,7 +37,7 @@ const ViewApplications = () => {
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="flex items-center gap-3">
                   <img
-                    src={application.userAvatar || assets.profile_img}
+                    src={application.userAvatar || assets.profile_pic}
                     alt={`${application.userName}'s avatar`}
                     className="h-8 w-8 rounded-full"
                   />
