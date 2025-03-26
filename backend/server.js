@@ -1,23 +1,28 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import bodyParser from "body-parser";
 
-import webHooksRouter from "./src/routes/webHooks.js";
 import connectDB from "./src/db/connectDB.js";
+import webhooksController from "./src/controllers/webhooksController.js";
 
 const app = express();
 
+// Load environment variables from .env file
 dotenv.config();
 
+// Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
+// Connect to the database
 connectDB();
 
-app.get("/", (req, res) => res.send("Api is working"));
+// Routes
+app.get("/", (req, res) => res.send("API is working"));
+app.use("/webhooks", webhooksController);
 
-app.use("/api", webHooksRouter);
-
+// Set up server
 const PORT = process.env.SERVER_RUNNING_PORT || 8080;
-app.listen(PORT, () => console.log(`🌐 Server is running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`🌐 Server is running on port ${PORT}`);
+});

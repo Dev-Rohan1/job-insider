@@ -1,11 +1,11 @@
 import { Webhook } from "svix";
-
-import User from "../models/user.js";
+import User from "../models/User.js";
 
 const webhooksController = async (req, res) => {
   try {
     const webhook = new Webhook(process.env.CLERK_WEBHOOK_SCRET);
 
+    // Verify the webhook request
     webhook.verify(JSON.stringify(req.body), {
       "svix-id": req.headers["svix-id"],
       "svix-timestamp": req.headers["svix-timestamp"],
@@ -16,15 +16,15 @@ const webhooksController = async (req, res) => {
 
     switch (type) {
       case "user.created": {
-        const userData = {
+        const userData = new User({
           _id: data.id,
           email: data.email_addresses[0].email_address,
-          name: data.first_name + " " + data.last_name,
+          name: `${data.first_name} ${data.last_name}`,
           image: data.image_url,
           resume: "",
-        };
+        });
 
-        await userData.save(userData);
+        await User.create(userData);
         res.json({});
         break;
       }
@@ -32,7 +32,7 @@ const webhooksController = async (req, res) => {
       case "user.updated": {
         const userData = {
           email: data.email_addresses[0].email_address,
-          name: data.first_name + " " + data.last_name,
+          name: `${data.first_name} ${data.last_name}`,
           image: data.image_url,
         };
 
@@ -46,12 +46,16 @@ const webhooksController = async (req, res) => {
         res.json({});
         break;
       }
+
       default: {
         break;
       }
     }
   } catch (error) {
-    res.json({ success: false, message: "webhook error" });
+    console.error("Webhook error:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Webhook processing error" });
   }
 };
 
