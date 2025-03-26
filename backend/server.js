@@ -20,4 +20,4 @@ app.get("/", (req, res) => res.send("Api is working"));
 app.use("/api", webHooksRouter);
 
 const PORT = process.env.SERVER_RUNNING_PORT || 8080;
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🌐 Server is running on port ${PORT}`));
