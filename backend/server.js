@@ -4,6 +4,7 @@ import cors from "cors";
 
 import connectDB from "./src/db/connectDB.js";
 import webhooksController from "./src/controllers/webhooksController.js";
+import companyController from "./src/controllers/companyController.js";
 
 const app = express();
 
@@ -20,6 +21,7 @@ connectDB();
 // Routes
 app.get("/", (req, res) => res.send("API is working"));
 app.use("/webhooks", webhooksController);
+app.post("/company", companyController);
 
 // Set up server
 const PORT = process.env.SERVER_RUNNING_PORT || 8080;

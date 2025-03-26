@@ -8,7 +8,7 @@ const connectDB = async () => {
       throw new Error("Database connection string is not provided");
     }
 
-    await mongoose.connect(`${connectionString}/job-insider`);
+    await mongoose.connect(`${connectionString}`);
 
     console.log("✅ Database connection successful");
   } catch (error) {

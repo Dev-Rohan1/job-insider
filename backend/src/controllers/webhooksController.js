@@ -1,12 +1,12 @@
 import { Webhook } from "svix";
+
 import User from "../models/User.js";
 
 const webhooksController = async (req, res) => {
   try {
-    const webhook = new Webhook(process.env.CLERK_WEBHOOK_SCRET);
+    const webhook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
 
-    // Verify the webhook request
-    webhook.verify(JSON.stringify(req.body), {
+    await webhook.verify(JSON.stringify(req.body), {
       "svix-id": req.headers["svix-id"],
       "svix-timestamp": req.headers["svix-timestamp"],
       "svix-signature": req.headers["svix-signature"],
@@ -16,46 +16,47 @@ const webhooksController = async (req, res) => {
 
     switch (type) {
       case "user.created": {
-        const userData = new User({
+        const userData = {
           _id: data.id,
           email: data.email_addresses[0].email_address,
-          name: `${data.first_name} ${data.last_name}`,
+          name: data.first_name + " " + data.last_name,
           image: data.image_url,
           resume: "",
-        });
+        };
 
         await User.create(userData);
+
         res.json({});
+
         break;
       }
-
       case "user.updated": {
         const userData = {
           email: data.email_addresses[0].email_address,
-          name: `${data.first_name} ${data.last_name}`,
+          name: data.first_name + " " + data.last_name,
           image: data.image_url,
         };
 
         await User.findByIdAndUpdate(data.id, userData);
+
         res.json({});
+
         break;
       }
-
       case "user.deleted": {
-        await User.findByIdAndDelete(data.id);
+        await User.findOneAndDelete(data._id);
+
         res.json({});
+
         break;
       }
 
-      default: {
+      default:
         break;
-      }
     }
   } catch (error) {
-    console.error("Webhook error:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Webhook processing error" });
+    console.error(error);
+    res.status(400).json({ success: false, message: "Webhook error" });
   }
 };
 
