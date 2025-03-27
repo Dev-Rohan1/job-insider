@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { v2 as cloudinary } from "cloudinary";
 import Company from "../models/Company.js";
 import generateToken from "../utils/generateToken.js";
+import Job from "../models/Job.js";
 
 export const registerCompany = async (req, res) => {
   const { name, email, password } = req.body;
@@ -108,9 +109,64 @@ export const loginCompany = async (req, res) => {
   }
 };
 
-export const getCompanyData = async (req, res) => {};
+export const postJob = async (req, res) => {
+  const { title, description, location, category, level, salary } = req.body;
 
-export const postJob = async (req, res) => {};
+  if (!title) {
+    return res.json({ success: false, message: "Job title is required" });
+  }
+
+  if (!description) {
+    return res.json({ success: false, message: "Job description is required" });
+  }
+
+  if (!location) {
+    return res.json({ success: false, message: "Job location is required" });
+  }
+
+  if (!category) {
+    return res.json({ success: false, message: "Job category is required" });
+  }
+
+  if (!level) {
+    return res.json({ success: false, message: "Job level is required" });
+  }
+
+  if (!salary) {
+    return res.json({ success: false, message: "Job salary is required" });
+  }
+
+  try {
+    const companyId = req.company.id;
+
+    const job = new Job({
+      title,
+      description,
+      location,
+      category,
+      level,
+      salary,
+      date: Date.now(),
+      companyId,
+    });
+
+    await job.save();
+
+    return res.json({
+      success: true,
+      message: "Job posted successfully",
+      jobData: job,
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      message: "Failed to post job",
+      error: error.message || "Unknown error",
+    });
+  }
+};
+
+export const getCompanyData = async (req, res) => {};
 
 export const getCompanyJobApplicants = async (req, res) => {};
 

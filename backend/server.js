@@ -2,10 +2,10 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 
-
 import connectDB from "./src/db/connectDB.js";
 import webhooksController from "./src/controllers/webhooksController.js";
 import companyRoutes from "./src/routes/companyRoutes.js";
+import jobRoutes from "./src/routes/jobRoutes.js";
 import connectCloudinary from "./src/utils/cloudinary.js";
 
 const app = express();
@@ -25,6 +25,7 @@ connectCloudinary();
 app.get("/", (req, res) => res.send("API is working"));
 app.use("/webhooks", webhooksController);
 app.use("/api/company", companyRoutes);
+app.use("/api/job", jobRoutes);
 
 // Set up server
 const PORT = process.env.SERVER_RUNNING_PORT || 5050;
