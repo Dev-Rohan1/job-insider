@@ -29,7 +29,7 @@ app.get("/", (req, res) => res.send("API is working"));
 app.use("/webhooks", webhooksController);
 app.use("/api/company", companyRoutes);
 app.use("/api/job", jobRoutes);
-app.use("/api/user", userRoutes);
+// app.use("/api/user", userRoutes);
 
 // Set up server
 const PORT = process.env.SERVER_RUNNING_PORT || 5050;
