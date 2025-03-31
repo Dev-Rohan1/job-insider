@@ -1,19 +1,66 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Mail, Lock, User } from "lucide-react";
 import { useClerk } from "@clerk/clerk-react";
 import { Link, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
+import { AppContext } from "../contexts/AppContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const RecruiterSignup = () => {
-  const { user, createUser } = useClerk();
+  const { user } = useClerk();
   const navigate = useNavigate();
+  const { setCompanyData, setCompanyToken, backendUrl } =
+    useContext(AppContext);
 
   const [companyName, setCompanyName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [image, setImage] = useState(null);
   const [logo, setLogo] = useState(null);
+
+  const handleLogoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setLogo(URL.createObjectURL(file));
+    }
+  };
+
+  const recuiterSIgnupHandler = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("name", companyName);
+    formData.append("email", email);
+    formData.append("image", image);
+    formData.append("password", password);
+
+    try {
+      const { data } = await axios.post(
+        `${backendUrl}/company/register`,
+        formData,
+      );
+
+      if (data.success) {
+        setCompanyData(data.companyData);
+        setCompanyToken(data.token);
+        localStorage.setItem("companyToken", data.token);
+
+        toast.success(data.message);
+        navigate("/dashboard");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+          "Something went wrong. Please try again.",
+      );
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -21,28 +68,17 @@ const RecruiterSignup = () => {
     }
   }, [user, navigate]);
 
-  const handleLogoUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setLogo(URL.createObjectURL(file));
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-  };
-
   return (
     <>
       <Navbar />
       <section className="mt-15 mb-15 flex h-[70vh] items-center justify-center">
         <div className="w-full max-w-[370px] rounded-lg border border-gray-300 p-6">
-          <form className="text-center" onSubmit={handleSubmit}>
+          <form className="text-center" onSubmit={recuiterSIgnupHandler}>
             <h1 className="mb-2 text-2xl font-bold text-gray-800">
               Recruiter Sign Up
             </h1>
             <p className="mb-6 text-gray-700">
-              Welcome back! Please signup in to continue.
+              Welcome! Please sign up to continue.
             </p>
 
             <div className="space-y-4">

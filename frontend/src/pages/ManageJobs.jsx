@@ -1,10 +1,74 @@
-import React from "react";
-import { assets, manageJobsData } from "../assets/assets";
+import React, { useContext, useEffect, useState } from "react";
+import { assets } from "../assets/assets";
+import Loader from "../components/Loader";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../contexts/AppContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const ManageJobs = () => {
   const navigate = useNavigate();
+  const { backendUrl, companyToken } = useContext(AppContext);
+
+  const [jobData, setJobData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchManageJobs = async () => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/company/list-jobs`, {
+        headers: {
+          token: companyToken,
+        },
+      });
+
+      if (data.success) {
+        setJobData(data.jobData || []);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+      setError("Failed to fetch jobs");
+      setLoading(false);
+    }
+  };
+
+  const changeJobVisibility = async (id) => {
+    try {
+      const { data } = await axios.post(
+        `${backendUrl}/company/change-visiblity`,
+        { id },
+        { headers: { token: companyToken } },
+      );
+
+      if (data.success) {
+        fetchManageJobs();
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message); // Fixed error handling
+      console.error("Error changing job visibility:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchManageJobs();
+  }, [backendUrl, companyToken]);
+
+  if (loading) {
+    return (
+      <div className="flex h-[60vh] items-center justify-center">
+        <Loader />
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <section className="space-y-4">
@@ -33,18 +97,13 @@ const ManageJobs = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {manageJobsData.map((job, index) => (
+            {jobData.map((job, index) => (
               <tr key={`${job.id}-${index}`} className="hover:bg-gray-50">
                 <td className="px-6 py-4 text-sm font-medium whitespace-nowrap text-gray-700">
                   {index + 1}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={job.companyLogo || assets.company_icon}
-                      alt={`${job.company} logo`}
-                      className="h-8 w-8 rounded-full object-cover"
-                    />
+                  <div className="flex items-center">
                     <div>
                       <p className="font-medium text-gray-600">{job.title}</p>
                       <p className="text-xs text-gray-500">{job.company}</p>
@@ -65,8 +124,13 @@ const ManageJobs = () => {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-center whitespace-nowrap">
-                  <label className="relative inline-flex cursor-pointer items-center">
-                    <input type="checkbox" />
+                  <label className="inline-flexitems-center relative">
+                    <input
+                      className="cursor-pointer"
+                      type="checkbox"
+                      onChange={() => changeJobVisibility(job._id)}
+                      checked={job.visible || false}
+                    />
                   </label>
                 </td>
               </tr>

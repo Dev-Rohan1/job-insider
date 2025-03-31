@@ -1,8 +1,11 @@
 import bcrypt from "bcrypt";
 import { v2 as cloudinary } from "cloudinary";
 import Company from "../models/Company.js";
-import generateToken from "../utils/generateToken.js";
 import Job from "../models/Job.js";
+import JobApplicant from "../models/jobApplication.js";
+
+import generateToken from "../utils/generateToken.js";
+import JobApplication from "../models/jobApplication.js";
 
 export const registerCompany = async (req, res) => {
   const { name, email, password } = req.body;
@@ -52,8 +55,8 @@ export const registerCompany = async (req, res) => {
         name: company.name,
         email: company.email,
         image: company.image,
-        token: generateToken(company._id),
       },
+      token: generateToken(company._id),
     });
   } catch (error) {
     console.error("Registration error:", error);
@@ -97,8 +100,8 @@ export const loginCompany = async (req, res) => {
         name: company.name,
         email: company.email,
         image: company.image,
-        token: generateToken(company._id),
       },
+      token: generateToken(company._id),
     });
   } catch (error) {
     return res.json({
@@ -166,12 +169,141 @@ export const postJob = async (req, res) => {
   }
 };
 
-export const getCompanyData = async (req, res) => {};
+export const getCompanyData = async (req, res) => {
+  try {
+    const company = req.company;
 
-export const getCompanyJobApplicants = async (req, res) => {};
+    if (!company) {
+      return res.json({
+        success: false,
+        message: "Company not found",
+      });
+    }
 
-export const getCompanyPostedJob = async (req, res) => {};
+    return res.json({
+      success: true,
+      message: "Company data fetched successfully",
+      companyData: company,
+    });
+  } catch (error) {
+    console.error("Error fetching company data:", error);
+    return res.json({
+      success: false,
+      message: "Failed to fetch company data",
+      error: error.message || "Unknown error",
+    });
+  }
+};
 
-export const changeJobApplicationStatus = async (req, res) => {};
+export const getCompanyPostedJob = async (req, res) => {
+  const companyId = req.company.id;
 
-export const changeVisiblity = async (req, res) => {};
+  try {
+    const jobs = await Job.find({ companyId });
+
+    if (!jobs) {
+      return res.json({
+        success: false,
+        message: "No jobs posted by the company",
+      });
+    }
+
+    const jobData = await Promise.all(
+      jobs.map(async (job) => {
+        const applicants = await JobApplicant.find({ jobId: job._id });
+
+        return { ...job.toObject(), applicants: applicants.length };
+      })
+    );
+
+    return res.json({
+      success: true,
+      message: "Company posted job data fetched successfully",
+      jobData: jobData,
+    });
+  } catch (error) {
+    console.error("Error fetching company posted jobs:", error);
+    return res.json({
+      success: false,
+      message: "Failed to fetch company posted job data",
+      error: error.message || "Unknown error",
+    });
+  }
+};
+
+export const changeVisibility = async (req, res) => {
+  const { id } = req.body;
+  const companyId = req.company.id;
+
+  try {
+    const job = await Job.findById(id);
+
+    if (!job) {
+      return res.json({
+        success: false,
+        message: "Job not found",
+      });
+    }
+
+    if (companyId.toString() === job.companyId.toString()) {
+      job.visible = !job.visible;
+    }
+
+    await job.save();
+
+    return res.json({
+      success: true,
+      message: "Job visibility changed successfully",
+      jobData: job,
+    });
+  } catch (error) {
+    console.error("Error changing job visibility:", error);
+    return res.json({
+      success: false,
+      message: "Failed to change job visibility",
+      error: error.message || "Unknown error",
+    });
+  }
+};
+
+export const getCompanyJobApplicants = async (req, res) => {
+  try {
+    const companyId = req.company.id;
+
+    const jobs = await JobApplication.find({ companyId })
+      .populate("userId", "name image resume")
+      .populate(
+        "jobId",
+        "title description location category level salary date"
+      )
+      .exec();
+
+    return res.json({
+      success: true,
+      message: "Company job applicants fetched successfully",
+      jobApplicants: jobs,
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      message: "Failed to fetch company job applicants",
+    });
+  }
+};
+
+export const changeJobApplicationStatus = async (req, res) => {
+  const { jobId, status } = req.body;
+
+  try {
+    await JobApplication.updateOne({ jobId }, { status });
+    return res.json({
+      success: true,
+      message: "Job application status changed successfully",
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      message: "Failed to change job application status",
+    });
+  }
+};

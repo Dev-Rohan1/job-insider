@@ -1,8 +1,11 @@
+import { useAuth } from "@clerk/clerk-react";
+import axios from "axios";
 import kConverter from "k-convert";
 import { MapPin, User } from "lucide-react";
 import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { assets } from "../assets/assets";
 import Footer from "../components/Footer";
 import JobList from "../components/JobList";
@@ -12,23 +15,85 @@ import { AppContext } from "../contexts/AppContext";
 
 const ApplyJobs = () => {
   const [jobData, setJobData] = useState(null);
+  const [isApplying, setIsApplying] = useState(false);
+  const [isAlreadyApplied, setIsAlreadyApplied] = useState(false);
   const { id } = useParams();
-  const { jobs } = useContext(AppContext);
+  const { jobs, backendUrl, userData, userApplications, fetchJobApplications } =
+    useContext(AppContext);
+
+  const navigate = useNavigate();
+  const { getToken } = useAuth();
+
+  const checkedAlreadyApplied = async () => {
+    const hasApplied = userApplications.some(
+      (application) => application.jobId._id === jobData._id,
+    );
+    setIsAlreadyApplied(hasApplied);
+  };
+
+  const applyJobHandler = async () => {
+    try {
+      setIsApplying(true);
+      const token = await getToken();
+
+      if (!userData) {
+        toast.error("Please login to apply for this job");
+        return;
+      }
+
+      if (!userData.resume) {
+        navigate("/applications");
+        toast.error("Please upload your resume before applying");
+        return;
+      }
+
+      const { data } = await axios.post(
+        `${backendUrl}/user/apply-job`,
+        {
+          jobId: jobData._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (data.success) {
+        toast.success("Application submitted successfully!");
+        await fetchJobApplications();
+        checkedAlreadyApplied();
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || 
+                         "We couldn't process your application. Please try again.";
+      toast.error(errorMessage);
+    } finally {
+      setIsApplying(false);
+    }
+  };
 
   useEffect(() => {
     const fetchJobs = () => {
-      const data = jobs.find((job) => job._id === id);
-      if (data) {
-        setJobData(data);
-      } else {
+      if (!id) {
         setJobData(undefined);
+        return;
       }
+
+      const data = jobs.find((job) => job._id === id);
+      setJobData(data || undefined);
     };
 
     fetchJobs();
   }, [id, jobs]);
 
-  if (jobData === null) {
+  useEffect(() => {
+    if (jobData) {
+      checkedAlreadyApplied();
+    }
+  }, [jobData, userApplications]);
+
+  if (jobData === null || jobData === undefined) {
     return (
       <>
         <Navbar />
@@ -39,19 +104,8 @@ const ApplyJobs = () => {
     );
   }
 
-  if (!jobData) {
-    return (
-      <>
-        <Navbar />
-        <div>Job not found.</div>
-      </>
-    );k
-  }
-
-  // Filter jobs from the same company and exclude the current job
   const similarJobs = jobs.filter(
-    (job) =>
-      job.companyId.name === jobData.companyId.name && job._id !== jobData._id,
+    (job) => job.companyId.name === jobData.companyId.name && job._id !== jobData._id
   );
 
   return (
@@ -63,7 +117,7 @@ const ApplyJobs = () => {
             <div className="flex h-[6.5rem] w-[6.5rem] items-center justify-center rounded-lg border border-gray-200 bg-white">
               <img
                 className="w-14"
-                src={assets.company_icon}
+                src={jobData.companyId.image}
                 alt="Company Icon"
               />
             </div>
@@ -71,12 +125,8 @@ const ApplyJobs = () => {
               <h2 className="mb-4 text-center text-2xl font-medium text-gray-700 md:text-left md:text-3xl md:font-semibold">
                 {jobData.title || "Job Title Not Available"}
               </h2>
-              <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4">
-                <div
-                  className="flex items-center gap-1"
-                  role="img"
-                  aria-label="Company"
-                >
+              <div className="flex flex-wrap items-center justify-center gap-3 md:justify-start md:gap-4">
+                <div className="flex items-center gap-1">
                   <img
                     src={assets.suitcase_icon}
                     alt="Suitcase Icon"
@@ -88,7 +138,7 @@ const ApplyJobs = () => {
                 </div>
                 <div className="flex items-center gap-1">
                   <MapPin size={20} className="text-gray-600" />
-                  <span className="flex items-center text-gray-700">
+                  <span className="text-gray-700">
                     {jobData.location || "Location Not Specified"}
                   </span>
                 </div>
@@ -105,23 +155,25 @@ const ApplyJobs = () => {
                     className="h-5 w-5"
                   />
                   <span className="text-gray-700">
-                    CTC:{" "}
-                    {jobData.salary
-                      ? kConverter.convertTo(jobData.salary)
-                      : "Not Specified"}
+                    CTC: {jobData.salary ? kConverter.convertTo(jobData.salary) : "Not Specified"}
                   </span>
                 </div>
               </div>
             </div>
           </div>
-          <div className="mt-8 flex flex-col items-center md:items-start lg:mt-0">
+          <div className="mt-8 flex flex-col items-center lg:mt-0">
             <button
-              className="cursor-pointer rounded bg-blue-600 px-8 py-2 text-white"
+              onClick={applyJobHandler}
+              disabled={isAlreadyApplied || isApplying}
+              className={`cursor-pointer rounded bg-blue-600 px-8 py-2 text-white ${
+                isAlreadyApplied || isApplying ? "cursor-not-allowed opacity-50" : ""
+              }`}
               aria-label="Apply for this job"
             >
-              Apply now
+              {isApplying ? "Applying..." : 
+               isAlreadyApplied ? "Already Applied" : "Apply now"}
             </button>
-            <span className="mt-2 block text-sm text-gray-600">
+            <span className="mt-2 text-sm text-gray-600">
               Posted {moment(jobData.date).fromNow()}
             </span>
           </div>
@@ -137,30 +189,20 @@ const ApplyJobs = () => {
               dangerouslySetInnerHTML={{
                 __html: jobData.description,
               }}
-            ></div>
-            <button
-              className="mb-10 cursor-pointer rounded bg-blue-600 px-8 py-2 text-white"
-              aria-label="Apply for this job"
-            >
-              Apply now
-            </button>
+            />
           </div>
           <div className="mt-10 w-full lg:w-[28%]">
             <p className="mb-7 text-xl font-semibold">
-              More jobs from{" "}
-              <strong className="text-blue-500">
-                {jobData.companyId.name}
-              </strong>
+              More jobs from <strong className="text-blue-500">{jobData.companyId.name}</strong>
             </p>
             <div className="mb-10 flex flex-col gap-5">
               {similarJobs.length > 0 ? (
-                similarJobs
-                  .slice(0, 2)
-                  .reverse()
-                  .map((job, index) => <JobList key={index} job={job} />)
+                similarJobs.map((job) => (
+                  <JobList key={job._id} job={job} />
+                ))
               ) : (
-                <div className="text-red-500">
-                  No more jobs available from this company 😔
+                <div className="text-gray-500">
+                  No other jobs available from this company
                 </div>
               )}
             </div>

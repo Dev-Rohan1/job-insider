@@ -1,6 +1,5 @@
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import React, { useContext, useEffect, useState } from "react";
-
 import {
   JobCategories,
   JobCategoriesEmojis,
@@ -9,14 +8,13 @@ import {
 } from "../assets/assets";
 import { AppContext } from "../contexts/AppContext";
 import JobList from "./JobList";
+import Loader from "../components/Loader";
 
 const JobListing = () => {
   const { searchFilter, setSearchFilter, isSearched, setIsSearched, jobs } =
     useContext(AppContext);
-
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 6;
-
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState([]);
   const [filterJobs, setFilterJobs] = useState([]);
@@ -68,7 +66,7 @@ const JobListing = () => {
 
     setFilterJobs(newFilteredJobs);
     setCurrentPage(1);
-    setLoading(false);
+    setLoading(false); // Move this to after filtering
   }, [selectedCategory, selectedLocation, searchFilter, jobs]);
 
   const totalPages = Math.ceil(filterJobs.length / jobsPerPage);
@@ -86,7 +84,12 @@ const JobListing = () => {
   };
 
   if (loading) {
-    return <p className="mt-16 text-lg">Loading jobs... ⏳</p>;
+    return (
+      <div className="mt-16 flex flex-col items-center justify-center text-center text-lg">
+        <Loader />
+        <p className="mt-4 block text-center">Loading jobs...</p>
+      </div>
+    );
   }
 
   return (
@@ -197,10 +200,8 @@ const JobListing = () => {
             <div className="mt-8 mb-10 flex flex-wrap items-center justify-center gap-2">
               <button
                 onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
-                className={`cursor-pointer ${
-                  currentPage === 1 ? "cursor-not-allowed opacity-50" : ""
-                }`}
                 disabled={currentPage === 1}
+                className={`cursor-pointer ${currentPage === 1 ? "cursor-not-allowed opacity-50" : ""}`}
                 aria-label="Previous page"
               >
                 <ChevronLeft />
@@ -221,12 +222,8 @@ const JobListing = () => {
                 onClick={() =>
                   setCurrentPage(Math.min(currentPage + 1, totalPages))
                 }
-                className={`cursor-pointer ${
-                  currentPage === totalPages
-                    ? "cursor-not-allowed opacity-50"
-                    : ""
-                }`}
                 disabled={currentPage === totalPages}
+                className={`cursor-pointer ${currentPage === totalPages ? "cursor-not-allowed opacity-50" : ""}`}
                 aria-label="Next page"
               >
                 <ChevronRight />

@@ -1,38 +1,62 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import { JobCategories, JobLocations } from "../assets/assets";
+import { AppContext } from "../contexts/AppContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const AddJobs = () => {
   const editorRef = useRef(null);
   const quillRef = useRef(null);
 
-  const [jobTitle, setJobTitle] = useState("");
-  const [JobCategory, setJobCategory] = useState("Programming");
-  const [JobLocation, setJobLocation] = useState("Bangladesh");
-  const [JobLevel, setJobLevel] = useState("Junior Level");
+  const { backendUrl, companyToken } = useContext(AppContext);
+
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("Programming");
+  const [location, setLocation] = useState("Bangladesh");
+  const [level, setLevel] = useState("Junior Level");
   const [salary, setSalary] = useState("");
 
-  const handler = (e) => {
+  const addJobHandler = async (e) => {
     e.preventDefault();
 
-    if (!quillRef.current || !quillRef.current.root.innerHTML.trim()) {
-      alert("Job description cannot be empty");
-      return;
-    }
+    try {
+      const { data } = await axios.post(
+        `${backendUrl}/company/post-job`,
+        {
+          title,
+          category,
+          location,
+          level,
+          salary,
+          description: quillRef.current.root.innerHTML,
+        },
+        {
+          headers: {
+            token: companyToken,
+          },
+        },
+      );
 
-    console.log({
-      jobTitle,
-      JobCategory,
-      JobLocation,
-      JobLevel,
-      salary,
-      jobDescription: quillRef.current.root.innerHTML,
-    });
+      if (data.success) {
+        toast.success(data.message);
+        setTitle("");
+        setCategory("Programming");
+        setLocation("Bangladesh");
+        setLevel("Junior Level");
+        quillRef.current.root.innerHTML = "";
+        setSalary("");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   useEffect(() => {
-    if (!quillRef.current && editorRef.current) {
+    if (editorRef.current && !quillRef.current) {
       quillRef.current = new Quill(editorRef.current, {
         theme: "snow",
         placeholder: "Enter job description...",
@@ -48,15 +72,15 @@ const AddJobs = () => {
 
   return (
     <section className="mx-auto max-w-4xl">
-      <form onSubmit={handler} className="space-y-6">
+      <form onSubmit={addJobHandler} className="space-y-6">
         <div className="space-y-1">
           <label htmlFor="jobTitle" className="block font-medium">
             Job Title
           </label>
           <input
             id="jobTitle"
-            onChange={(e) => setJobTitle(e.target.value)}
-            value={jobTitle}
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
             className="w-full rounded border border-gray-300 p-2"
             type="text"
             placeholder="Job Title"
@@ -76,10 +100,9 @@ const AddJobs = () => {
             </label>
             <select
               id="jobCategory"
-              onChange={(e) => setJobCategory(e.target.value)}
-              value={JobCategory}
+              onChange={(e) => setCategory(e.target.value)}
+              value={category}
               className="w-full rounded border border-gray-300 p-2"
-              required
             >
               {JobCategories.map((job) => (
                 <option value={job} key={job}>
@@ -96,9 +119,8 @@ const AddJobs = () => {
             <select
               id="jobLocation"
               className="w-full rounded border border-gray-300 p-2"
-              required
-              onChange={(e) => setJobLocation(e.target.value)}
-              value={JobLocation}
+              onChange={(e) => setLocation(e.target.value)}
+              value={location}
             >
               {JobLocations.map((location) => (
                 <option value={location} key={location}>
@@ -115,9 +137,8 @@ const AddJobs = () => {
             <select
               id="jobLevel"
               className="w-full rounded border border-gray-300 p-2"
-              required
-              onChange={(e) => setJobLevel(e.target.value)}
-              value={JobLevel}
+              onChange={(e) => setLevel(e.target.value)}
+              value={level}
             >
               <option value="Senior Level">Senior Level</option>
               <option value="Intermediate Level">Intermediate Level</option>
@@ -131,13 +152,13 @@ const AddJobs = () => {
             Salary
           </label>
           <input
+            required
             id="salary"
             type="number"
             placeholder="Salary"
             onChange={(e) => setSalary(e.target.value)}
-            value={salary}
+            value={salary || ""}
             className="w-full rounded border border-gray-300 p-2"
-            required
             min="0"
           />
         </div>

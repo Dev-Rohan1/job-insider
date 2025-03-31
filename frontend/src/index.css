@@ -39,4 +39,12 @@ html {
   ul li {
     margin-bottom: 5px;
   }
+
+  .Toastify__toast {
+    font-family: "Outfit", sans-serif !important;
+  }
+
+  .Toastify__toast-body {
+    font-family: "Outfit", sans-serif !important;
+  }
 }
