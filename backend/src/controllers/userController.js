@@ -40,6 +40,14 @@ export const applyJob = async (req, res) => {
   const { jobId } = req.body;
   const userId = req.auth.userId;
 
+  // Validation for jobId
+  if (!jobId) {
+    return res.status(400).json({
+      success: false,
+      message: "Job ID is required",
+    });
+  }
+
   try {
     const isAlreadyApplied = await JobApplication.findOne({ jobId, userId });
 
@@ -84,6 +92,7 @@ export const applyJob = async (req, res) => {
 
 export const getUserApplications = async (req, res) => {
   const userId = req.auth.userId;
+
   try {
     const jobApplications = await JobApplication.find({ userId })
       .populate({
@@ -98,8 +107,9 @@ export const getUserApplications = async (req, res) => {
 
     if (!jobApplications || jobApplications.length === 0) {
       return res.json({
-        success: false,
+        success: true, // Changed this to true
         message: "No job applications found",
+        jobApplications: [],
       });
     }
 
@@ -138,6 +148,7 @@ export const updateResume = async (req, res) => {
       });
     }
 
+    // Upload the resume to Cloudinary
     const resumeUpload = await cloudinary.uploader.upload(resumeFile.path);
 
     userData.resume = resumeUpload.secure_url;
