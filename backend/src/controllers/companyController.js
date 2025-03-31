@@ -140,7 +140,7 @@ export const postJob = async (req, res) => {
   }
 
   try {
-    const companyId = req.company.id;
+    const companyId = req.company._id;
 
     const job = new Job({
       title,
@@ -196,7 +196,8 @@ export const getCompanyData = async (req, res) => {
 };
 
 export const getCompanyPostedJob = async (req, res) => {
-  const companyId = req.company.id;
+  console.log(req.company);
+  const companyId = req.company._id;
 
   try {
     const jobs = await Job.find({ companyId });
@@ -233,7 +234,7 @@ export const getCompanyPostedJob = async (req, res) => {
 
 export const changeVisibility = async (req, res) => {
   const { id } = req.body;
-  const companyId = req.company.id;
+  const companyId = req.company._id;
 
   try {
     const job = await Job.findById(id);
@@ -268,7 +269,7 @@ export const changeVisibility = async (req, res) => {
 
 export const getCompanyJobApplicants = async (req, res) => {
   try {
-    const companyId = req.company.id;
+    const companyId = req.company._id;
 
     const jobs = await JobApplication.find({ companyId })
       .populate("userId", "name image resume")
