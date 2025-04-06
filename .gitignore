@@ -28,3 +28,6 @@ dist-ssr
 
 # Other files
 *.sw*
+
+# Local Netlify folder
+.netlify
