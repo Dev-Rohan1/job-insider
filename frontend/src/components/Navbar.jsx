@@ -8,7 +8,7 @@ const Navbar = () => {
   const { user } = useUser();
 
   return (
-    <header className="border-b border-gray-200">
+    <header className="border-b border-gray-200 mb-10">
       <nav className="flex items-center justify-between p-4 max-w-7xl mx-auto">
         <Link to="/" aria-label="Home">
           <img
