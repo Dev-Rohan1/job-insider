@@ -25,7 +25,7 @@ const Navbar = () => {
           <div className="flex items-center gap-2 sm:gap-4">
             <Link
               to="/applications"
-              className="text-xs sm:text-sm md:text-base hover:text-blue-600 transition-colors whitespace-nowrap"
+              className="text-[15px] md:text-base hover:text-blue-600 transition-colors whitespace-nowrap"
               aria-label="View job applications"
             >
               Job Applied
