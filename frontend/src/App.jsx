@@ -1,9 +1,9 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
-import ApplyJob from "./pages/ApplyJob";
-import Applications from "./pages/Applications";
 import AppLayout from "./layout/AppLayout";
+import Applications from "./pages/Applications";
+import ApplyJob from "./pages/ApplyJob";
+import Home from "./pages/Home";
 
 const App = () => {
   return (

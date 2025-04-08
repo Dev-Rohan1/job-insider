@@ -1,3 +1,4 @@
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
@@ -12,11 +13,13 @@ if (!PUBLISHABLE_KEY) {
 }
 
 createRoot(document.getElementById("root")).render(
-  <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-    <AppContext>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </AppContext>
-  </ClerkProvider>
+  <StrictMode>
+    <BrowserRouter>
+      <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+        <AppContext>
+          <App />
+        </AppContext>
+      </ClerkProvider>
+    </BrowserRouter>
+  </StrictMode>
 );
