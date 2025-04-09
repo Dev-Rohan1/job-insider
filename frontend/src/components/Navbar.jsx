@@ -9,7 +9,7 @@ const Navbar = () => {
 
   return (
     <header className="border-b border-gray-200 mb-6 sm:mb-10">
-      <nav className="flex items-center justify-between p-3 sm:p-4 max-w-7xl mx-auto">
+      <nav className="flex items-center justify-between py-3 sm:py-4 max-w-7xl mx-auto">
         <Link to="/" aria-label="Home" className="flex-shrink-0">
           <img
             className="w-[130px] md:w-full"
@@ -22,7 +22,7 @@ const Navbar = () => {
         {!isLoaded ? (
           <div className="h-8 w-20 bg-gray-200 rounded animate-pulse"></div>
         ) : user ? (
-          <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-2">
             <Link
               to="/applications"
               className="text-[15px] md:text-base hover:text-blue-600 transition-colors whitespace-nowrap"

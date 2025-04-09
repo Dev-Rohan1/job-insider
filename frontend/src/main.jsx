@@ -1,25 +1,24 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
-import { AppContext } from "./context/AppContext.jsx";
+import { AppContextProvider } from "./context/AppContext.jsx";
 import { ClerkProvider } from "@clerk/clerk-react";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Publishable Key");
+  throw new Error(
+    "Missing Clerk Publishable Key. Ensure `VITE_CLERK_PUBLISHABLE_KEY` is set in your environment variables."
+  );
 }
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
     <BrowserRouter>
-      <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-        <AppContext>
-          <App />
-        </AppContext>
-      </ClerkProvider>
+      <AppContextProvider>
+        <App />
+      </AppContextProvider>
     </BrowserRouter>
-  </StrictMode>
+  </ClerkProvider>
 );
