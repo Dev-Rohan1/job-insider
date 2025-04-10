@@ -216,6 +216,8 @@ const JobListing = () => {
             <p className="mb-8">Get your desired job from top companies</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               {filteredJobs
+                .slice()
+                .reverse()
                 .slice((currentPage - 1) * 6, currentPage * 6)
                 .map((job, index) => (
                   <JobList job={job} key={index} />
