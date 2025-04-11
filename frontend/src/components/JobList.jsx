@@ -1,6 +1,6 @@
 import React from "react";
-import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
+import { assets } from "../assets/assets";
 
 const JobList = ({ job }) => {
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ const JobList = ({ job }) => {
           Apply now
         </button>
         <button
-          onClick={() => handleNavigation(`/job-details/${job._id}`)}
+          onClick={() => handleNavigation(`/apply-job/${job._id}`)}
           className="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded text-sm font-medium transition-colors focus:outline-none focus:ring-1 focus:ring-gray-300"
           aria-label={`View details for ${job.title} position`}
         >

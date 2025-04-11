@@ -1,6 +1,6 @@
-import { ChevronRight, X, ChevronLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import React, { useContext, useEffect, useState } from "react";
-import { JobCategories, JobLocations, jobsData } from "../assets/assets";
+import { JobCategories, JobLocations } from "../assets/assets";
 import { AppContext } from "../context/AppContext";
 import JobList from "./JobList";
 import Loader from "./Loader";
@@ -89,9 +89,7 @@ const JobListing = () => {
   return (
     <section className="mt-16 mb-20">
       <div className="flex flex-col lg:flex-row gap-6">
-        {/* sidebar */}
         <div className="w-full lg:w-[25%]">
-          {/* current search */}
           {isSearched &&
             (searchFilter.title !== "" || searchFilter.location !== "") && (
               <div className="mb-5">
@@ -120,15 +118,12 @@ const JobListing = () => {
                 </div>
               </div>
             )}
-          {/* Mobile view: Show "Search by filters" button */}
           <button
             onClick={showFilterHandler}
             className="border mb-5 md:hidden cursor-pointer border-gray-300 rounded px-8 py-1.5"
           >
             {showFilter ? "Close" : "Search by filters"}
           </button>
-
-          {/* For medium and up (md), show the filters */}
           <div className="hidden md:block">
             <div>
               <h3 className="text-xl font-medium">Search by Categories</h3>
@@ -165,8 +160,6 @@ const JobListing = () => {
               </ul>
             </div>
           </div>
-
-          {/* For mobile view, conditionally render the filters */}
           {showFilter && (
             <div className="md:hidden">
               <div>
@@ -210,10 +203,12 @@ const JobListing = () => {
         {/* job list */}
         {filteredJobs.length > 0 ? (
           <div className="w-full">
-            <h1 className="text-2xl font-semibold text-gray-700 mb-2">
+            <h1 className="text-2xl md:text-3xl font-semibold text-gray-700 mb-2">
               Latest Jobs
             </h1>
-            <p className="mb-8">Get your desired job from top companies</p>
+            <p className="mb-8 text-gray-700">
+              Get your desired job from top companies
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               {filteredJobs
                 .slice()

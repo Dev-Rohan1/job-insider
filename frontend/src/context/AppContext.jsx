@@ -9,15 +9,7 @@ export const AppContextProvider = ({ children }) => {
     title: "",
     location: "",
   });
-  const [jobs, setJobs] = useState(null);
-
-  const fetchJobs = () => {
-    setJobs(jobsData);
-  };
-
-  useEffect(() => {
-    fetchJobs();
-  }, []);
+  const [jobs, setJobs] = useState(jobsData);
 
   const value = {
     isSearched,

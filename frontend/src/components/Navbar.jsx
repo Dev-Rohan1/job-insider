@@ -1,7 +1,7 @@
+import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { assets } from "../assets/assets";
-import { useClerk, useUser, UserButton } from "@clerk/clerk-react";
 
 const Navbar = () => {
   const { openSignUp } = useClerk();
@@ -42,12 +42,13 @@ const Navbar = () => {
           </div>
         ) : (
           <div className="flex items-center gap-2 sm:gap-4">
-            <button
+            <Link
+              to={"/recuiter-login"}
               className="text-xs sm:text-sm md:text-base hover:text-blue-600 transition-colors whitespace-nowrap"
               aria-label="Recruiter login"
             >
               Recruiter Login
-            </button>
+            </Link>
             <button
               onClick={() => openSignUp()}
               className="cursor-pointer px-3 py-1 sm:px-4 sm:py-[4px] bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm md:text-base rounded transition-all whitespace-nowrap"
