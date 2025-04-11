@@ -1,7 +1,10 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
+import { useEffect } from "react";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
   const sidebarLinks = [
     {
       name: "Manage Job",
@@ -19,6 +22,13 @@ const Dashboard = () => {
       icon: assets.person_tick_icon,
     },
   ];
+
+  useEffect(() => {
+    if (window.location.pathname === "/dashboard") {
+      navigate("manage-job");
+    }
+    document.title = "Insider Job | Dashboard";
+  }, [navigate]);
 
   return (
     <>
