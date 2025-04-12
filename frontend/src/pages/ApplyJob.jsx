@@ -122,7 +122,7 @@ const ApplyJob = () => {
             <div className="lg:w-96 flex-shrink-0">
               <div className="bg-white rounded-lg ">
                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-                  Similar Jobs{" "}
+                  Similar Jobs from{" "}
                   <strong className="text-blue-600">
                     {jobData.companyId?.name}
                   </strong>
