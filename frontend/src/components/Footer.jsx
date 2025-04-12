@@ -10,7 +10,7 @@ const Footer = () => {
             <img src={assets.logo} alt="Company Logo" className="h-8 w-auto" />
             <span className="text-gray-400 hidden sm:block">|</span>
             <p className="text-gray-600 text-sm sm:text-base text-center md:text-left">
-              Copyright © GreatStack.dev | All rights reserved.
+              Copyright © ❤️‍🔥Rohan❤️‍🔥 2025 | All rights reserved.
             </p>
           </div>
 
