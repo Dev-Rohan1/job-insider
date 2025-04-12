@@ -30,6 +30,13 @@ const webhookController = async (req, res) => {
         break;
       }
 
+      case "user.deleted": {
+        await User.findByIdAndDelete(data.id);
+
+        res.json({});
+        break;
+      }
+
       case "user.updated": {
         const userData = {
           name: data.first_name + " " + data.last_name,
@@ -38,12 +45,6 @@ const webhookController = async (req, res) => {
         };
 
         await User.findByIdAndUpdate(data.id, userData);
-
-        res.json({});
-        break;
-      }
-      case "user.deleted": {
-        await User.findByIdAndDelete(data.id);
 
         res.json({});
         break;

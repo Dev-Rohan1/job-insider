@@ -13,7 +13,7 @@ app.use(express.json());
 connectDB();
 
 app.get("/", (req, res) => res.send("Api is working"));
-app.post("/webhooks", webhookController);
+app.post("/webhook", webhookController);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
