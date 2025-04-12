@@ -3,7 +3,6 @@ import User from "../models/User.js";
 
 const webhookController = async (req, res) => {
   try {
-    // Verify the webhook payload
     const webhook = new Webhook(process.env.WEBHOOK_SECRET_KEY);
     await webhook.verify(JSON.stringify(req.body), {
       "svix-id": req.headers["svix-id"],
@@ -24,7 +23,7 @@ const webhookController = async (req, res) => {
         };
 
         const user = new User(userData);
-        await user.save(); // Handle errors during save
+        await user.save();
 
         res.json({});
         break;
