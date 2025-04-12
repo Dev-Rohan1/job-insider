@@ -1,12 +1,11 @@
 import { Webhook } from "svix";
-
 import User from "../models/User.js";
 
 const webhookController = async (req, res) => {
   try {
+    // Verify the webhook payload
     const webhook = new Webhook(process.env.WEBHOOK_SECRET_KEY);
-
-    await webhook.verify(JSON.stringify(req.boyd), {
+    await webhook.verify(JSON.stringify(req.body), {
       "svix-id": req.headers["svix-id"],
       "svix-timestamp": req.headers["svix-timestamp"],
       "svix-signature": req.headers["svix-signature"],
@@ -24,7 +23,8 @@ const webhookController = async (req, res) => {
           image: data.image_url,
         };
 
-        await User.create(userData);
+        const user = new User(userData);
+        await user.save(); // Handle errors during save
 
         res.json({});
         break;
@@ -32,7 +32,6 @@ const webhookController = async (req, res) => {
 
       case "user.deleted": {
         await User.findByIdAndDelete(data.id);
-
         res.json({});
         break;
       }
@@ -45,17 +44,21 @@ const webhookController = async (req, res) => {
         };
 
         await User.findByIdAndUpdate(data.id, userData);
-
         res.json({});
         break;
       }
 
       default:
+        res
+          .status(400)
+          .json({ success: false, message: "Unhandled event type" });
         break;
     }
   } catch (error) {
-    console.log(error);
-    res.status(400).json({ success: false, message: "webhook error" });
+    console.log("Webhook verification failed:", error.message);
+    res
+      .status(400)
+      .json({ success: false, message: "Webhook verification failed" });
   }
 };
 
