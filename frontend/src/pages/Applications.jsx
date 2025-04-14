@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import { assets } from "../assets/assets";
-import moment from "moment";
-import { AppContext } from "../context/AppContext";
-import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
-import { toast } from "react-toastify";
+import axios from "axios";
 import { LoaderCircle } from "lucide-react";
+import moment from "moment";
+import React, { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { assets } from "../assets/assets";
+import Footer from "../components/Footer";
 import Loader from "../components/Loader";
+import Navbar from "../components/Navbar";
+import { AppContext } from "../context/AppContext";
 
 const Applications = () => {
   const [isEdit, setIsEdit] = useState(false);
