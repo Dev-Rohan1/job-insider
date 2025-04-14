@@ -2,6 +2,7 @@ import { v2 as cloudinary } from "cloudinary";
 
 import JobApplication from "../models/jobApplication.js";
 import User from "../models/User.js";
+import Job from "../models/Job.js";
 
 export const getUserData = async (req, res) => {
   try {
@@ -71,7 +72,7 @@ export const getUserApplication = async (req, res) => {
     const userId = req.auth.userId;
 
     const applications = await JobApplication.find({ userId })
-      .populate("companyId", "name, email image")
+      .populate("companyId", "name email image")
       .populate("jobId", "title description location category level salary")
       .exec();
 
@@ -95,7 +96,7 @@ export const getUserApplication = async (req, res) => {
   }
 };
 
-export const updateUserResume = async () => {
+export const updateUserResume = async (req, res) => {
   try {
     const userId = req.auth.userId;
 

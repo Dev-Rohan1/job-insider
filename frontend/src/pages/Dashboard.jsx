@@ -17,8 +17,6 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log(error);
-
   const sidebarLinks = [
     {
       name: "Manage Job",
@@ -113,7 +111,7 @@ const Dashboard = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 p-4 md:p-6 overflow-auto">
+        <div className="flex-1  pl-4 pt-4 overflow-auto">
           <Outlet />
         </div>
       </div>

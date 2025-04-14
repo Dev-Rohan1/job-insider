@@ -75,7 +75,7 @@ const AddJob = () => {
   };
 
   return (
-    <section className="p-6">
+    <section className="pl-2 pt-2">
       <form onSubmit={addJobPostSubmitHandler}>
         {/* Job Title */}
         <div className="mb-6">

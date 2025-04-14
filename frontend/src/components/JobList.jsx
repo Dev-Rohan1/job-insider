@@ -17,7 +17,7 @@ const JobList = ({ job }) => {
   return (
     <div className="border border-gray-300 rounded-lg px-5 py-6 hover:shadow-md transition-shadow">
       <img
-        src={assets.company_icon}
+        src={job.companyId.image}
         alt={`${job.company || "Company"} logo`}
         className="h-12 w-12 object-contain"
       />

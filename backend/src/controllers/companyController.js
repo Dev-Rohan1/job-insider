@@ -220,7 +220,30 @@ export const postJob = async (req, res) => {
   }
 };
 
-export const getCompanyJobApplicants = async () => {};
+export const getCompanyJobApplicants = async (req, res) => {
+  try {
+    const companyId = req.company._id;
+
+    const applicants = await jobApplication
+      .find({ companyId })
+      .populate("userId", "name image resume")
+      .populate("jobId", "title location category level salary")
+      .exec();
+
+    return res.status(200).json({
+      success: true,
+      message: "Company job applicants fetched successfully",
+      jobApplicants: applicants,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch job applicants",
+    });
+  }
+};
 
 export const getCompanyPostedJobs = async (req, res) => {
   try {
@@ -250,7 +273,25 @@ export const getCompanyPostedJobs = async (req, res) => {
     });
   }
 };
-export const changeJobApplicationStatus = async () => {};
+export const changeJobApplicationStatus = async (req, res) => {
+  try {
+    const { id, status } = req.body;
+
+    await jobApplication.findOneAndUpdate({ _id: id }, { status });
+
+    return res.status(200).json({
+      success: true,
+      message: "Job application status changed successfully",
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Job application status change failed",
+    });
+  }
+};
 
 export const changeJobVisibility = async (req, res) => {
   try {
