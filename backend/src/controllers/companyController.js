@@ -281,14 +281,14 @@ export const changeJobApplicationStatus = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Job application status changed successfully",
+      message: "Status changed successfully",
     });
   } catch (error) {
     console.log(error);
 
     return res.status(500).json({
       success: false,
-      message: "Job application status change failed",
+      message: "Status change failed",
     });
   }
 };
