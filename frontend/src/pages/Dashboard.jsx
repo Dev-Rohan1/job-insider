@@ -1,9 +1,23 @@
-import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { LoaderCircle, LogOutIcon } from "lucide-react";
+import { useContext, useEffect } from "react";
+import {
+  Link,
+  NavLink,
+  Outlet,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import { assets } from "../assets/assets";
-import { useEffect } from "react";
+import { AppContext } from "../context/AppContext";
+import { toast } from "react-toastify";
+import Footer from "../components/Footer";
 
 const Dashboard = () => {
+  const { companyData, loading, error } = useContext(AppContext);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  console.log(error);
 
   const sidebarLinks = [
     {
@@ -23,26 +37,53 @@ const Dashboard = () => {
     },
   ];
 
+  const logoutHandler = () => {
+    localStorage.removeItem("companyToken");
+    toast.success("Logout successful");
+    navigate("/recuiter-login");
+  };
+
   useEffect(() => {
-    if (window.location.pathname === "/dashboard") {
+    if (location.pathname === "/dashboard") {
       navigate("manage-job");
     }
     document.title = "Insider Job | Dashboard";
-  }, [navigate]);
+  }, [location.pathname, navigate]);
 
   return (
     <>
       {/* Top Navigation Bar */}
       <div className="flex items-center justify-between border-b border-gray-300 py-3 bg-white sticky top-0 z-10">
         <Link to="/dashboard">
-          <img className="h-9" src={assets.logo} alt="Logo" />
+          <img className="h-9" src={assets.logo} alt="Insider Job Logo" />
         </Link>
-        <div className="flex items-center gap-5 text-gray-500">
-          <p>Hi! Admin</p>
-          <button className="border border-gray-300 rounded-full text-sm px-4 py-1 hover:bg-gray-100 transition-colors">
-            Logout
-          </button>
-        </div>
+        {error ? (
+          <LoaderCircle className="animate-spin text-gray-700" />
+        ) : loading ? (
+          <div className="flex justify-start items-start text-gray-700">
+            <LoaderCircle className="animate-spin text-gray-700" />
+          </div>
+        ) : (
+          <div className="flex items-center gap-3 text-gray-700">
+            <div className="flex items-center gap-2">
+              <p className="text-sm hidden md:block">
+                Welcome! {companyData?.name}
+              </p>
+              <img
+                className="w-[30px] h-[30px] rounded-full object-cover"
+                src={companyData?.image || assets.default_avatar}
+                alt={`${companyData?.name || "Company"} Logo`}
+              />
+            </div>
+            <div
+              onClick={logoutHandler}
+              title="Logout"
+              className="w-[40px] h-[40px] flex items-center justify-center rounded hover:bg-gray-50 transition-colors cursor-pointer"
+            >
+              <LogOutIcon size={22} />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Main Layout */}
@@ -56,8 +97,8 @@ const Dashboard = () => {
               className={({ isActive }) =>
                 `flex items-center py-3 px-4 gap-3 mb-3 ${
                   isActive
-                    ? "border-r-4 md:border-r-[6px] bg-indigo-500/10 border-indigo-500 text-indigo-500  rounded-l-md"
-                    : "hover:bg-gray-100/90 border-white text-gray-700 rounded-l-md "
+                    ? "border-r-4 md:border-r-[6px] bg-indigo-500/10 border-indigo-500 text-indigo-500 rounded-l-md"
+                    : "hover:bg-gray-100/90 border-white text-gray-700 rounded-l-md"
                 }`
               }
             >
@@ -76,6 +117,7 @@ const Dashboard = () => {
           <Outlet />
         </div>
       </div>
+      <Footer />
     </>
   );
 };

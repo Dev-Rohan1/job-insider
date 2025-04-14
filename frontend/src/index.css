@@ -10,6 +10,10 @@ html {
   scroll-behavior: smooth;
 }
 
+.Toastify__toast {
+  font-family: "Outfit", sans-serif !important;
+}
+
 @layer components {
   .job-description p {
     color: #000000a3;

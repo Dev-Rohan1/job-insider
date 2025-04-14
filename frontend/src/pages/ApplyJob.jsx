@@ -1,4 +1,4 @@
-import kConverter from "k-converter";
+import KConvert from "k-convert";
 import { Clock, MapPin, User } from "lucide-react";
 import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
@@ -16,6 +16,10 @@ const ApplyJob = () => {
   const [jobData, setJobData] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const salary = Number(jobData?.salary);
+
+  console.log(salary);
+
   useEffect(() => {
     const data = jobs.find((job) => job._id === id);
     setJobData(data || null);
@@ -32,8 +36,8 @@ const ApplyJob = () => {
 
   if (!jobData) {
     return (
-      <div className="flex items-center justify-center w-full min-h-[60vh]">
-        <p className="text-gray-500">Job not found</p>
+      <div className="flex items-center justify-center w-full h-screen">
+        <Loader />
       </div>
     );
   }
@@ -79,7 +83,7 @@ const ApplyJob = () => {
                 <div className="flex items-center gap-1 text-gray-600">
                   <img src={assets.money_icon} alt="money_icon" />
                   <span className="text-[15px] md:text-base">
-                    CTC: {kConverter.convertTo(jobData.salary)}
+                    CTC: {KConvert.convertTo(salary)}
                   </span>
                 </div>
               </div>

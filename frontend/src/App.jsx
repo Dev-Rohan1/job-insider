@@ -1,3 +1,4 @@
+import "quill/dist/quill.snow.css";
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import AppLayout from "./layout/AppLayout";
@@ -10,7 +11,6 @@ import ManageJob from "./pages/ManageJob";
 import RecuiterLogin from "./pages/RecuiterLogin";
 import RecruiterSignup from "./pages/RecuiterSignup";
 import ViewApplications from "./pages/ViewApplications";
-import "quill/dist/quill.snow.css";
 
 const App = () => {
   return (

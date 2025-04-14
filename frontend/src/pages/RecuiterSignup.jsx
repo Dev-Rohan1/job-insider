@@ -1,12 +1,24 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Upload, Briefcase, Mail, Lock, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const RecruiterSignup = () => {
   const [previewImage, setPreviewImage] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
   const fileInputRef = useRef(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { backendUrl, setCompanyData, setCompanyToken, setError } =
+    useContext(AppContext);
+
+  const navigate = useNavigate();
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -23,6 +35,7 @@ const RecruiterSignup = () => {
         return;
       }
 
+      setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreviewImage(reader.result);
@@ -35,6 +48,7 @@ const RecruiterSignup = () => {
     e.preventDefault();
     e.stopPropagation();
     setPreviewImage(null);
+    setImageFile(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -44,12 +58,54 @@ const RecruiterSignup = () => {
     fileInputRef.current.click();
   };
 
+  const handleSignupFromSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData(); // Moved inside the function
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("password", password);
+      if (imageFile) {
+        formData.append("image", imageFile);
+      }
+
+      const { data } = await axios.post(
+        `${backendUrl}/company/register`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log(data);
+      if (data.success) {
+        setCompanyData(data.companyData);
+        setCompanyToken(data.token);
+        toast.success(data.message);
+        localStorage.setItem("companyToken", data.token);
+        navigate("/dashboard");
+      } else {
+        toast.error(data.message);
+        setError(true);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+      setError(true);
+    }
+  };
+
   return (
     <>
       <Navbar />
       <section className="flex items-center justify-center min-h-[calc(100vh-140px)]">
         <div className="w-full max-w-md px-4 space-y-8">
-          <form className="mt-8 space-y-6 p-8 rounded-xl border border-gray-200 shadow-sm transition-shadow duration-300">
+          <form
+            onSubmit={handleSignupFromSubmit}
+            className="mt-8 space-y-6 p-8 rounded-xl border border-gray-200 shadow-sm transition-shadow duration-300"
+            encType="multipart/form-data"
+          >
             <div className="text-center">
               <h2 className="text-[25px] font-bold text-gray-700">
                 Recruiter Sign Up
@@ -118,6 +174,8 @@ const RecruiterSignup = () => {
                   type="text"
                   placeholder="Company Name"
                   className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   required
                 />
               </div>
@@ -129,6 +187,8 @@ const RecruiterSignup = () => {
                   type="email"
                   placeholder="Email id"
                   className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
@@ -140,6 +200,8 @@ const RecruiterSignup = () => {
                   type="password"
                   placeholder="Enter Password"
                   className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                 />
               </div>

@@ -4,6 +4,7 @@ import { v2 as cloudinary } from "cloudinary";
 import Company from "../models/Company.js";
 import Job from "../models/Job.js";
 import generateToken from "../utils/generateToken.js";
+import jobApplication from "../models/jobApplication.js";
 
 export const registerCompany = async (req, res) => {
   try {
@@ -55,6 +56,11 @@ export const registerCompany = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: "Company registered successfully",
+      companyData: {
+        name: newCompany.name,
+        email: newCompany.email,
+        image: newCompany.image,
+      },
       token: generateToken(newCompany._id),
     });
   } catch (error) {
@@ -106,6 +112,11 @@ export const loginCompany = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Company logged in successfully",
+      companyData: {
+        name: company.name,
+        email: company.email,
+        image: company.image,
+      },
       token: generateToken(company._id),
     });
   } catch (error) {
@@ -217,10 +228,18 @@ export const getCompanyPostedJobs = async (req, res) => {
 
     const jobs = await Job.find({ companyId });
 
+    const jobsData = await Promise.all(
+      jobs.map(async (job) => {
+        const applicants = await jobApplication.find({ jobId: job._id });
+
+        return { ...job.toObject(), applicants: applicants.length };
+      })
+    );
+
     return res.status(200).json({
       success: true,
       message: "Company job data fetched successfully",
-      jobData: jobs,
+      jobData: jobsData,
     });
   } catch (error) {
     console.error(error);
