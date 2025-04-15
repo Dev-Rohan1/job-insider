@@ -68,7 +68,7 @@ npm run dev
 
 ```bash
 git clone https://github.com/Dev-Rohan1/job-insider.git
-cd frontend
+cd backend
 npm install
 npm run server
 ```
