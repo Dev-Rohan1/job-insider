@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import React, { useContext, useEffect, useState, useMemo } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { JobCategories, JobLocations } from "../assets/assets";
 import { AppContext } from "../context/AppContext";
 import JobList from "./JobList";

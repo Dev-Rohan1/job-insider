@@ -65,6 +65,9 @@ const AddJob = () => {
         setTitle("");
         setDescription("");
         setSalary(0);
+        const [category, setCategory] = useState("Programming");
+        const [location, setLocation] = useState("Dhaka");
+        const [level, setLevel] = useState("Intermediate");
         if (quillRef.current) quillRef.current.setContents([]);
       } else {
         toast.error(data.message);
