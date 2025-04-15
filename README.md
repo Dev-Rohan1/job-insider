@@ -75,7 +75,8 @@ npm run server
 
 ### Frontend Environment (.env)
 
-`VITE_CLERK_PUBLISHABLE_KEY`=""
+`VITE_CLERK_PUBLISHABLE_KEY`="" 
+
 `VITE_BACKEND_URL`=http://localhost:8080
 
 ### Backend Environment (.env)
