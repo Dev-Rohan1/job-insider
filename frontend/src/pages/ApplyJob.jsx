@@ -225,19 +225,17 @@ const ApplyJob = () => {
                 }}
               />
             </div>
-            <div className="mt-6">
-              <button
-                onClick={applyJobHandler}
-                disabled={alreadyApplied}
-                className={`w-full px-4 py-2 sm:px-6 sm:py-3 ${
-                  alreadyApplied
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-blue-600 hover:bg-blue-700"
-                } text-white font-medium rounded-lg transition-colors shadow-sm text-sm sm:text-base`}
-              >
-                {alreadyApplied ? "Already Applied" : "Apply Now"}
-              </button>
-            </div>
+            <button
+              onClick={applyJobHandler}
+              disabled={alreadyApplied}
+              className={`px-4 py-2 sm:px-6 sm:py-3 ${
+                alreadyApplied
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700"
+              } text-white font-medium rounded-lg transition-colors shadow-sm text-sm sm:text-base`}
+            >
+              {alreadyApplied ? "Already Applied" : "Apply Now"}
+            </button>
           </div>
 
           <div className="lg:w-96 flex-shrink-0">
