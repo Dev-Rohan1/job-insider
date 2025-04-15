@@ -97,7 +97,7 @@ const Applications = () => {
   return (
     <>
       <Navbar />
-      <section className="px-4 py-8">
+      <section className="px-4 ">
         <div className="mb-8">
           <h3 className="text-lg font-medium mb-3">Your Resume</h3>
           {isEdit ? (

@@ -15,7 +15,8 @@ import axios from "axios";
 
 const ApplyJob = () => {
   const { id } = useParams();
-  const { jobs, userData, userApplication } = useContext(AppContext);
+  const { jobs, userData, userApplication, fetchJobsData } =
+    useContext(AppContext);
   const [jobData, setJobData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [alreadyApplied, setAlreadyApplied] = useState(false);
@@ -23,6 +24,18 @@ const ApplyJob = () => {
 
   const navigate = useNavigate();
   const { getToken } = useAuth();
+
+  useEffect(() => {
+    fetchJobsData();
+  }, []);
+
+  useEffect(() => {
+    if (jobs) {
+      const data = jobs.find((job) => job?._id === id);
+      setJobData(data || null);
+      setLoading(false);
+    }
+  }, [jobs, id]);
 
   const salary = Number(jobData?.salary) || 0;
 
@@ -83,13 +96,7 @@ const ApplyJob = () => {
     if (userApplication?.length > 0 && jobData) {
       checkAlreadyApplied();
     }
-  }, [userApplication, jobData, id]);
-
-  useEffect(() => {
-    const data = jobs?.find((job) => job?._id === id);
-    setJobData(data || null);
-    setLoading(false);
-  }, [jobs, id]);
+  }, [userApplication, jobData]);
 
   if (loading) {
     return (
@@ -101,14 +108,33 @@ const ApplyJob = () => {
 
   if (!jobData) {
     return (
-      <div className="flex items-center justify-center w-full h-screen">
-        <p className="text-gray-500">Job not found</p>
+      <div className="flex flex-col items-center justify-center w-full h-screen">
+        <h2 className="text-2xl font-semibold text-gray-700 mb-2">
+          Job Not Found
+        </h2>
+        <p className="text-gray-500 mb-6">
+          The job you're looking for doesn't exist or may have been removed.
+        </p>
+        <button
+          onClick={() => navigate("/")}
+          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          Browse Jobs
+        </button>
       </div>
     );
   }
 
   const appliedJobIds = new Set(
     userApplication?.map((app) => app?.jobId?._id).filter(Boolean) || []
+  );
+
+  // Get similar jobs from the same company that user hasn't applied to
+  const similarJobs = jobs?.filter(
+    (job) =>
+      job?._id !== id &&
+      job?.companyId?.name === jobData?.companyId?.name &&
+      !appliedJobIds.has(job._id)
   );
 
   return (
@@ -199,38 +225,42 @@ const ApplyJob = () => {
                 }}
               />
             </div>
+            <div className="mt-6">
+              <button
+                onClick={applyJobHandler}
+                disabled={alreadyApplied}
+                className={`w-full px-4 py-2 sm:px-6 sm:py-3 ${
+                  alreadyApplied
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-blue-600 hover:bg-blue-700"
+                } text-white font-medium rounded-lg transition-colors shadow-sm text-sm sm:text-base`}
+              >
+                {alreadyApplied ? "Already Applied" : "Apply Now"}
+              </button>
+            </div>
           </div>
 
-          {jobs?.filter(
-            (job) =>
-              job?._id !== id &&
-              job?.companyId?.name === jobData?.companyId?.name &&
-              !appliedJobIds.has(job._id)
-          )?.length > 0 && (
-            <div className="lg:w-96 flex-shrink-0">
-              <div className="bg-white rounded-lg p-6">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-                  Similar Jobs from{" "}
-                  <strong className="text-blue-600">
-                    {jobData?.companyId?.name || "this company"}
-                  </strong>
-                </h2>
+          <div className="lg:w-96 flex-shrink-0">
+            <div className="bg-white rounded-lg p-6">
+              <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+                Similar Jobs from{" "}
+                <strong className="text-blue-600">
+                  {jobData?.companyId?.name || "this company"}
+                </strong>
+              </h2>
+              {similarJobs?.length > 0 ? (
                 <div className="space-y-3">
-                  {jobs
-                    ?.filter(
-                      (job) =>
-                        job?._id !== id &&
-                        job?.companyId?.name === jobData?.companyId?.name &&
-                        !appliedJobIds.has(job._id)
-                    )
-                    ?.slice(0, 3)
-                    ?.map((job) => (
-                      <JobList key={job?._id} job={job} />
-                    ))}
+                  {similarJobs.slice(0, 3).map((job) => (
+                    <JobList key={job?._id} job={job} />
+                  ))}
                 </div>
-              </div>
+              ) : (
+                <p className="text-gray-500 text-center py-4">
+                  No similar jobs available from this company
+                </p>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </section>
       <Footer />

@@ -2,14 +2,13 @@ import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { toast } from "react-toastify";
-import { jobsData } from "../assets/assets";
 
 export const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
   const [isSearched, setIsSearched] = useState(false);
   const [searchFilter, setSearchFilter] = useState({ title: "", location: "" });
-  const [jobs, setJobs] = useState(jobsData);
+  const [jobs, setJobs] = useState(null);
   const [companyData, setCompanyData] = useState(null);
   const [companyToken, setCompanyToken] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -47,6 +46,7 @@ export const AppContextProvider = ({ children }) => {
   };
 
   const fetchJobsData = async () => {
+    setLoading(true);
     try {
       const { data } = await axios.get(`${backendUrl}/job/job-list`);
       if (data.success) {
@@ -57,6 +57,8 @@ export const AppContextProvider = ({ children }) => {
     } catch (error) {
       console.error("Error fetching jobs:", error);
       toast.error("Error fetching job listings");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -157,6 +159,7 @@ export const AppContextProvider = ({ children }) => {
     setUserApplication,
     fetchUserApplication,
     fetchUserData,
+    fetchJobsData
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
