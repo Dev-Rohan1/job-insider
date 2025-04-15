@@ -140,7 +140,7 @@ const ApplyJob = () => {
   return (
     <>
       <Navbar />
-      <section className="container mx-auto px-4 py-8">
+      <section>
         <div className="border border-blue-200 bg-blue-50 rounded-lg p-8 lg:p-16 flex flex-col lg:flex-row justify-between gap-6">
           <div className="flex flex-col md:items-center sm:flex-row gap-4">
             <div className="border border-gray-200 bg-white flex-shrink-0 flex items-center justify-center rounded-lg w-24 h-24">
@@ -213,7 +213,7 @@ const ApplyJob = () => {
 
         <div className="flex flex-col lg:flex-row gap-6 mt-8">
           <div className="flex-1">
-            <div className="bg-white rounded-lg p-6">
+            <div className="bg-white rounded-lg">
               <h2 className="text-2xl font-semibold text-gray-700 mb-4">
                 Job Description
               </h2>
@@ -239,7 +239,7 @@ const ApplyJob = () => {
           </div>
 
           <div className="lg:w-96 flex-shrink-0">
-            <div className="bg-white rounded-lg p-6">
+            <div className="bg-white rounded-lg pl-6 pt-6">
               <h2 className="text-2xl font-semibold text-gray-700 mb-4">
                 Similar Jobs from{" "}
                 <strong className="text-blue-600">
