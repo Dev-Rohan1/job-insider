@@ -90,6 +90,7 @@ export const JobLocations = [
   "Mymensingh",
   "Rajshahi",
   "Sylhet",
+  "Chattogram",
 ];
 
 // Sample data for Manage Jobs Page
