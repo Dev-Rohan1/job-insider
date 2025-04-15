@@ -13,6 +13,8 @@ import RecruiterSignup from "./pages/RecuiterSignup";
 import ViewApplications from "./pages/ViewApplications";
 
 const App = () => {
+  const companyToken = localStorage.getItem("companyToken");
+
   return (
     <AppLayout>
       <Routes>
@@ -21,11 +23,14 @@ const App = () => {
         <Route path="/applications" element={<Applications />} />
         <Route path="/recuiter-login" element={<RecuiterLogin />} />
         <Route path="/recuiter-signup" element={<RecruiterSignup />} />
-        <Route path="/dashboard" element={<Dashboard />}>
-          <Route path="add-job" element={<AddJob />} />
-          <Route path="manage-job" element={<ManageJob />} />
-          <Route path="view-applications" element={<ViewApplications />} />
-        </Route>
+
+        {companyToken && (
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route path="add-job" element={<AddJob />} />
+            <Route path="manage-job" element={<ManageJob />} />
+            <Route path="view-applications" element={<ViewApplications />} />
+          </Route>
+        )}
       </Routes>
     </AppLayout>
   );
